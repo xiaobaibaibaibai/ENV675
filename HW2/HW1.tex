@@ -38,7 +38,7 @@
 
 \begin{minipage}[t]{0.25\linewidth}
 \textbf{\Large
-  HW \# \underline{ 1 }
+  HW \# \underline{ 2 }
 } 
 
 \end{minipage} \vspace*{3ex}
@@ -88,6 +88,26 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 \hfill {\tiny This disclosure sheet was based on one originally designed
   by
   Profs. Royer and Older.}
+  
+ \pagebreak
+\large Question 1: \vspace{5mm} \\
+\normalsize 
+\begin{algorithm}
+\begin{algorithmic}
+\Function{find}{$A$, left, right}
+    \State \textbf{while} $right == 1$:
+    \State \hspace{0.8cm}  left = right
+    \State \hspace{0.8cm}  $right = right * 2$
+    \State \textbf{}$midpoint = left + (right - left) / 2$
+    \State \textbf{if} $A[midpoint] == 1$ and $A[midpoint + 1] == $ "error message":
+    \State \hspace{0.8cm}  \textbf{return} $midpoint$
+    \State \textbf{else if} $A[midpoint] == 1$:
+    \State \hspace{0.8cm}  \textbf{return find}($A$, midpoint, right)
+    \State \textbf{else}:
+    \State \hspace{0.8cm}  \textbf{return find}($A$, left, midpoint)
+\EndFunction
+\end{algorithmic}
+\end{algorithm}\vspace{3mm}\\
 
 
 \pagebreak
