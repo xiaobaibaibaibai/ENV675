@@ -92,7 +92,7 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 
 \pagebreak
 \noindent
-\large Question 1: \vspace{5mm} \\
+\large Question 1: \vspace{5mm} \par
 \normalsize 
 At beginning, we can put a thin book or a normal book or a wide book. Then for each selection, we also need to choose to put a thin book or a normal book or a wide book. Therefore, the pseudo code is: \\
 \begin{algorithm}
@@ -113,7 +113,7 @@ At beginning, we can put a thin book or a normal book or a wide book. Then for e
 
 \pagebreak
 \noindent
-\large Question 2: \vspace{5mm} \\
+\large Question 2: \vspace{5mm} \par
 \normalsize 
 At beginning, we can put a thin book or a normal book or a wide book. Then for each selection, we also need to choose to put a thin book or a normal book or a wide book. Therefore, the pseudo code is: \\
 \begin{algorithm}
@@ -137,14 +137,25 @@ At beginning, we can put a thin book or a normal book or a wide book. Then for e
 
 
 \pagebreak
-\large Question 3: \vspace{5mm}\\
+\large Question 3: \vspace{5mm} \par
 \normalsize 
-Based on description of HybridSort, there are 2 cases for $n-size$ input. The first is that algorithm recurses to a depth which is less than or equal to $r$ and all resulting subarrays have size 1. In this case, this algorithm is the totally same as MergeSort. \vspace{2mm}\\
+\setlength{\baselineskip}{8mm}
+Based on description of HybridSort, there are 2 cases for $n-size$ input. The first is that algorithm recurses to a depth which is less than or equal to $r$ and all resulting subarrays have size 1. In this case, this algorithm is the totally same as MergeSort. \vspace{2mm} \par
 The second is that algorithm recurses to the depth of $r$ and the resulting subarrays have a size $s$ which is greater than 1. Since $r$ is some fixed constant, the running time of dividing array is also constant, $C_r$. Since, the $s$, size of each resulting subarray, is $\frac{n}{2^r} $,  then the worst running time of Insertion Sort for each resulting subarray is 
-$O((\frac{n}{2^r})^2) = O((\frac{n^2}{2^{2r}})) = O(s^2) = O(n^2)$. The merge part is the same as MergeSort and the running time is $O(n)$. \vspace{2mm}\\
-When we consider the running time of some algorithms, the time often refers to the worst running time. When $n\to\infty$ in worst case, Insertion Sort for each resulting subarray is $O(n^2)$ and costs the longest running time. Therefore, the running time of HybridSort is $O(n^2)$.
+$O((\frac{n}{2^r})^2) = O((\frac{n^2}{2^{2r}})) = O(s^2) = O(n^2)$. The merge part is the same as MergeSort and the running time is $O(n)$. \vspace{2mm} \par
+When we consider the running time of some algorithms, the time often refers to the worst running time. When $n\to\infty$ in worst case, Insertion Sort for each resulting subarray is $O(n^2)$ and costs the longest running time. Therefore, the running time of HybridSort is $O(n^2)$. \\
 
 
+\pagebreak
+\large Question 4: \vspace{5mm}\\
+\normalsize 
+\setlength{\baselineskip}{8mm}
+\underline{Proof:} \par
+Based on description, n represents the number of nodes, k represents the number of edges, and c represent the number of components. \par 
+If there are a number $m$ of components in forest G, the sum of all nodes in G is $\sum_{j=1}^{m} {n_j} $. 
+The sum of all edges in G is $\sum_{j=1}^{m} {k_j} $. The sum of all nodes minus the sum of all edges is $\sum_{j=1}^{m} { n_j - k_j} $. 
+For each component, we know its nodes minus its edges equals to 1, so every $n_j - k_j = 1$. 
+Hence, $\sum_{j=1}^{m} { n_j - k_j} = \sum_{j=1}^{m} 1 = m$. Since $m = c$ is the number of components in forest G, the claim $c = n - k$ holds. 
 
 \pagebreak
 \large Question 1:\\
