@@ -75,8 +75,7 @@
   I view some mathematical formulas online.
   \begin{itemize}
     \item \href{url}{https://math.stackexchange.com/questions/1036002/proving-number-of-edges-in-f-n-k} 
-    \item \href{url}{https://en.wikipedia.org/wiki/Bucket_sort} 
-    \item \href{url}{https://en.wikipedia.org/wiki/Breadth-first_search} 
+   
   \end{itemize}
 
 \vfill
@@ -175,13 +174,14 @@ Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}})
 Based on description of HybridSort, there are 3 cases for $n-size$ input.\par 
 The first is that the depth of recursion tree is less than r. In this case, this algrothm is the same as MergeSort. Thus, the running time is $O(n\log{}{n})$. \par
 The second is the algorithm recurses to a depth of $r$ and all resulting subarrays have size 1. In this case, $\log{}{n} = r$ so the running time is $O(n \cdot r)$. \par
-The last is the algorithm recurses to a depth of $r$ and all resulting subarrays have size larger than 1. Since the depth of recursion tree is $r$, the size of each resulting subarray is $\frac{n}{2^r}$.
-We use InsertionSort to sort each resulting subarry, so the worst running time of each InsertionSort is $O( (\frac{n}{2^r})^2 ) = O(n^2) $. 
-The merge part is the same as MergeSort and the running time is $O(n)$.  \par
+The last is the algorithm recurses to a depth of $r$ and all resulting subarrays have size larger than 1. 
+Let $m$ denotes $2^r$.
+Since the depth of recursion tree is $r$,  there are the $2^r$ number of resulting subarrays and the size of each resulting subarray is $\frac{n}{2^r}$.
+We use InsertionSort to sort each resulting subarry, so the worst running time of each InsertionSort is $(\frac{n}{2^r})^2$.
+There are $2^r$ numbers of  resulting subarrays, so the time is $(2^r) \cdot (\frac{n}{2^r})^2 = \frac{n^2}{2^r} $
+The merge part is the same as MergeSort and the running time is $O(r \cdot n)$.  \par
 When we consider the running time of some algorithms, the time often refers to the worst running time. 
-The Recurrence Relation is $T(n) = 2(\frac{n}{2}) + O(n^2) + O(n)$. Since the depth of recursion tree is some constant $r$, so the time to divide array is also in a constant time. 
-Thus, the size of give array only effects on the running time of InsertionSort and merge. 
-When $n\to\infty$ in worst case, Insertion Sort for each resulting subarray is $O(n^2)$ and costs the longest running time. Therefore, the running time of HybridSort is $O(n^2)$. \\
+The total time should combine the running time of MergeSort and InsertionSort. Thus, the time is $O(\frac{n^2}{2^r} + r \cdot n)$\\
 
 
 \pagebreak
