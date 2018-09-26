@@ -9,6 +9,7 @@
 \usepackage{times}
 \usepackage{tikz}
 \usepackage{hyperref}
+\usepackage{graphicx}
 
 \lhead{}
 \rhead{}
@@ -66,13 +67,17 @@
 \vspace*{1ex}
 
 \noindent
-  If you answered \textbf{Yes} to one or more questions, please give the details here: \vspace*{5ex} \\
-  I consulted all questions with teaching assistant, Arash Sahebolamri, to confirm my understanding of all questions are correct. 
-  I also consult question 3, question 5, question 6 and extra question with another student, Wentian Bai. For question 3, question 5 and question 6, we discussed our ideas and I finish my algorithms independently. 
+  If you answered \textbf{Yes} to one or more questions, please give the details here: \vspace*{5ex} \par
+  I consulted all questions with teaching assistant, Reyhaneh Abdolazimi, to confirm my understanding of all questions are correct. 
+  I also consult all questions and extra question with another student, Wentian Bai. For all questions, we discussed our ideas and I finish my algorithms independently. 
   For the extra question, we discussed our understandings and I write my explanation independently.  \vspace*{5ex} \\
 
-  For the question 1, I view some mathematical formulas online. \\ \href{url}{http://tutorial.math.lamar.edu/Classes/CalcI/LHospitalsRule.aspx}
-
+  I view some mathematical formulas online.
+  \begin{itemize}
+    \item \href{url}{https://math.stackexchange.com/questions/1036002/proving-number-of-edges-in-f-n-k} 
+    \item \href{url}{https://en.wikipedia.org/wiki/Bucket_sort} 
+    \item \href{url}{https://en.wikipedia.org/wiki/Breadth-first_search} 
+  \end{itemize}
 
 \vfill
 \end{minipage}
@@ -94,20 +99,34 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 \noindent
 \large Question 1: \vspace{5mm} \par
 \normalsize 
-At beginning, we can put a thin book or a normal book or a wide book. Then for each selection, we also need to choose to put a thin book or a normal book or a wide book. Therefore, the pseudo code is: \\
+First find the midpoint to divide given array A into two parts. If $midpoint < A[midpoint]$, then recursively find right part. Otherwise, recursively find the left part.
+If current midpoint equals to the A[midpoint], it means the given array has an index $i$ such that $A[i] = i$. 
+When the length of current array is one and there is not an index $i$ such that $A[i] = i$, just return false.
+
+
 \begin{algorithm}
 \begin{algorithmic}
 \Function{find}{int[] $A$, left, right}
   \State \textbf{}$midpoint = left + (right - left) / 2$
   \State \textbf{if} $midpoint == A[midpoint]$:
-  \State \hspace{0.8cm}  \textbf{return} $midpoint$
+  \State \hspace{0.8cm}  \textbf{return} $True$
+  \State \textbf{if} $length(A) == 1$:
+  \State \hspace{0.8cm}  \textbf{return} $False$
   \State \textbf{else if} $midpoint < A[midpoint]$:
-  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint+1, right$)
+  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint \rightarrow right$)
   \State \textbf{else}:
-  \State \hspace{0.8cm} \textbf{return find}($A, left, midpoint-1$)
+  \State \hspace{0.8cm} \textbf{return find}($A, left \rightarrow midpoint$)
 \EndFunction
 \end{algorithmic}
-\end{algorithm}\\
+\end{algorithm}
+
+\textbf{running time:} \\
+The recurrence relation is $T(n) = T(\frac{n}{2}) + O(1)$.\\
+Based on Master Method \par
+$a = 1$  (only one recursive call will return in each function) \par
+$b = 2$  (split the array A into two parts) \par
+$d = 0$ (other operations take constant time)\\ 
+Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}}) = O(\log_{}{n})$  
 
 
 
@@ -115,172 +134,103 @@ At beginning, we can put a thin book or a normal book or a wide book. Then for e
 \noindent
 \large Question 2: \vspace{5mm} \par
 \normalsize 
-At beginning, we can put a thin book or a normal book or a wide book. Then for each selection, we also need to choose to put a thin book or a normal book or a wide book. Therefore, the pseudo code is: \\
+Divide given array A into two parts and check its midpoint. 
+\begin{itemize}
+  \item If A[midpoint] is both less than its adjacent values, it is the local minimum. If A[midpoint] is the first or last element of A, only compare with single adjacent element.
+  \item If the $A[midpoint] >  A[midpoint+1]$, there must exist a local minimum in the right part. Even if the right part is in decreasing order, the last element also meets the requirements. 
+	Thus, recursively call function to find right part of given array. 
+  \item Otherwise, recursively find its left part. Even if the left part is in increasing order, the first elelment meets the requirements.
+\end{itemize}
+
+
 \begin{algorithm}
 \begin{algorithmic}
 \Function{find}{int[] $A$, left, right}
+  \State \textbf{if length(A)==1}:
+  \State \hspace{0.8cm} \textbf{return} $A[0]$
   \State \textbf{}$midpoint = left + (right - left) / 2$
-  \State \textbf{if} $midpoint == 0$ \&\& $A[midpoint] < A[midpoint+1]$:
+  \State \textbf{if} $A[midpoint]$ less than its adjacent values:
   \State \hspace{0.8cm}  \textbf{return} $midpoint$
-  \State \textbf{else if} $midpoint == A.length-1$ \&\& $A[midpoint] < A[midpoint-2]$:
-  \State \hspace{0.8cm}  \textbf{return} $midpoint$
-  \State \textbf{else if} $A[midpoint] < A[midpoint + 1]$ \&\& $A[midpoint] < A[midpoint - 1]$:
-  \State \hspace{0.8cm}  \textbf{return } $midpoint$
   \State \textbf{else if} $A[midpoint] > A[midpoint + 1]$:
-  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint + 1, right$)
+  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint \rightarrow right$)
   \State \textbf{else}:
-  \State \hspace{0.8cm} \textbf{return find}($A, left, midpoint - 1$)
+  \State \hspace{0.8cm} \textbf{return find}($A, left \rightarrow midpoint$)
 \EndFunction
 \end{algorithmic}
-\end{algorithm}\\
+\end{algorithm}
 
+\textbf{running time:} \\
+The recurrence relation is $T(n) = T(\frac{n}{2}) + O(1)$.\\
+Based on Master Method \par
+$a = 1$  (only one recursive call will return in each function) \par
+$b = 2$  (split the array A into two parts) \par
+$d = 0$ (other operations take constant time)\\ 
+Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}}) = O(\log_{}{n})$  
 
 
 \pagebreak
 \large Question 3: \vspace{5mm} \par
 \normalsize 
 \setlength{\baselineskip}{8mm}
-Based on description of HybridSort, there are 2 cases for $n-size$ input. The first is that algorithm recurses to a depth which is less than or equal to $r$ and all resulting subarrays have size 1. In this case, this algorithm is the totally same as MergeSort. \vspace{2mm} \par
-The second is that algorithm recurses to the depth of $r$ and the resulting subarrays have a size $s$ which is greater than 1. Since $r$ is some fixed constant, the running time of dividing array is also constant, $C_r$. Since, the $s$, size of each resulting subarray, is $\frac{n}{2^r} $,  then the worst running time of Insertion Sort for each resulting subarray is 
-$O((\frac{n}{2^r})^2) = O((\frac{n^2}{2^{2r}})) = O(s^2) = O(n^2)$. The merge part is the same as MergeSort and the running time is $O(n)$. \vspace{2mm} \par
-When we consider the running time of some algorithms, the time often refers to the worst running time. When $n\to\infty$ in worst case, Insertion Sort for each resulting subarray is $O(n^2)$ and costs the longest running time. Therefore, the running time of HybridSort is $O(n^2)$. \\
+Based on description of HybridSort, there are 3 cases for $n-size$ input.\par 
+The first is that the depth of recursion tree is less than r. In this case, this algrothm is the same as MergeSort. Thus, the running time is $O(n\log{}{n})$. \par
+The second is the algorithm recurses to a depth of $r$ and all resulting subarrays have size 1. In this case, $\log{}{n} = r$ so the running time is $O(n \cdot r)$. \par
+The last is the algorithm recurses to a depth of $r$ and all resulting subarrays have size larger than 1. Since the depth of recursion tree is $r$, the size of each resulting subarray is $\frac{n}{2^r}$.
+We use InsertionSort to sort each resulting subarry, so the worst running time of each InsertionSort is $O( (\frac{n}{2^r})^2 ) = O(n^2) $. 
+The merge part is the same as MergeSort and the running time is $O(n)$.  \par
+When we consider the running time of some algorithms, the time often refers to the worst running time. 
+The Recurrence Relation is $T(n) = 2(\frac{n}{2}) + O(n^2) + O(n)$. Since the depth of recursion tree is some constant $r$, so the time to divide array is also in a constant time. 
+Thus, the size of give array only effects on the running time of InsertionSort and merge. 
+When $n\to\infty$ in worst case, Insertion Sort for each resulting subarray is $O(n^2)$ and costs the longest running time. Therefore, the running time of HybridSort is $O(n^2)$. \\
 
 
 \pagebreak
 \large Question 4: \vspace{5mm}\\
 \normalsize 
 \setlength{\baselineskip}{8mm}
+
+\underline{Claim:} Based on description, each component of forest is a tree. I need to prove that the number of trees in a forest equals to sum of all nodes minus sum of all edges. \vspace{5mm}\par
 \underline{Proof:} \par
-Based on description, n represents the number of nodes, k represents the number of edges, and c represent the number of components. \par 
-If there are a number $m$ of components in forest G, the sum of all nodes in G is $\sum_{j=1}^{m} {n_j} $. 
-The sum of all edges in G is $\sum_{j=1}^{m} {k_j} $. The sum of all nodes minus the sum of all edges is $\sum_{j=1}^{m} { n_j - k_j} $. 
-For each component, we know its nodes minus its edges equals to 1, so every $n_j - k_j = 1$. 
-Hence, $\sum_{j=1}^{m} { n_j - k_j} = \sum_{j=1}^{m} 1 = m$. Since $m = c$ is the number of components in forest G, the claim $c = n - k$ holds. 
+If there are a number $c$ of components in forest G, then the sum of all nodes in G is $\sum_{j=1}^{c} {n_j} $, where ${n_j}$ is the number of nodes in its component. \par 
+Then the sum of all edges in G is $\sum_{j=1}^{c} {k_j} $, where ${k_j}$ is the number of edges in its component. \par
+The sum of all nodes minus sum of all edges is $ n - k = \sum_{j=1}^{c} {n_j} - \sum_{j=1}^{c} {k_j}  = \sum_{j=1}^{c} {(n_j - k_j)}$. 
+We know each component of forest is a tree, and for each tree the number of its nodes minus its edges equals to 1, $|V| - |E| = 1$.
+Thus, the formula can be transform to $n - k = \sum_{j=1}^{c} {(n_j - k_j)} = \sum_{j=1}^{c} 1 = c$.
+Therefore, the claim holds.
 
-\pagebreak
-\large Question 1:\\
-\normalsize 
-\begin{enumerate}[label=(\alph*)]
-  \item $f(n) = n$ \hspace{1cm} $g(n) = n^2 - n$ \vspace{1mm} \\
-    $L = \lim_{n\to\infty} \frac{f(n)}{g(n)} = \lim_{n\to\infty} \frac{n}{n^2 - n} = \lim_{n\to\infty} \frac{n}{n(n-1)}$ \vspace{1mm} \\
-    $= \lim_{n\to\infty} \frac{1}{n - 1} = 1$ \vspace{1mm} \\
-    If $0 < L < \infty,$ $f(n) = \theta(g(n))$ and $f(n) = O(g(n)) $
-  \item $f(n) = \log_{}{5n} + 2$ \hspace{1cm} $g(n) = \log_{}{2n} + 5$ \vspace{1mm} \\
-    In BIg O notation, n is consider as infinite, so we should only compare $log_{}{5n}$ with $log_{}{2n}$. \vspace{1mm} \\
-    $L = \lim_{n\to\infty} \frac{f(n)}{g(n)} = \lim_{n\to\infty} \frac{\log_{}{5n} + 2}{\log_{}{2n} + 5} 
-    = \lim_{n\to\infty} \frac{\log_{}{5n}}{\log_{}{2n}}$ \vspace{2mm} \\
-    Based on L'Hopital Rule, \vspace{1mm} \\
-    $f_1(n) = \lim_{n\to\infty} \log_{}{5n} = \infty $ \vspace{1mm} \\
-    $g_1(n) = \lim_{n\to\infty} \log_{}{2n} = \infty $. \vspace{1mm} \\
-    Therefore, $\lim_{n\to\infty} \frac{\log_{}{5n}}{\log_{}{2n}} = \lim_{n\to\infty} \frac{f_1'(n)}{g_1'(n)}$ \vspace{1mm} \\
-    $f_1'(n) = \frac{d}{dn}\log_{}{5n} = \frac{1}{n}$ \vspace{1mm} \\
-    $g_1'(n) = \frac{d}{dn}\log_{}{2n} = \frac{1}{n}$ \vspace{1mm} \\
-    Thence, $L = \lim_{n\to\infty} \frac{\log_{}{5n}}{\log_{}{2n}} = \lim_{n\to\infty} \frac{f_1'(n)}{g_1'(n)} = 1$ \vspace{1mm} \\
-    Since, $\lim_{n\to\infty} \frac{\log_{}{2n + 5}}{\log_{}{5n + 2}}$ can be proved as the same way and get the same answer.
-    If $0 < L < \infty,$ $f(n) = \theta(g(n))$ so $f(n) = O(g(n)) $ and $ g(n) = \theta(f(n))$ so $g(n) = O(f(n)) $.
-  \item $f(n) = 10\log_{}{n}$ \hspace{1cm} $g(n) = \log_{}{n^4}$ \vspace{1mm} \\
-    $L = \lim_{n\to\infty} \frac{f(n)}{g(n)} = \lim_{n\to\infty} \frac{10\log_{}{n}}{\log_{}{n^4}} = \lim_{n\to\infty} \frac{10\log_{}{n}}{4\log_{}{n}} $ \vspace{1mm} \\
-    $L = \lim_{n\to\infty} \frac{\log{}{n}}{\log{}{n}} = 1 $\vspace{2mm} \vspace{1mm} \\
-    Since, $\lim_{n\to\infty} \frac{g(n)}{f(n)}$ can be proved as the same way and get the same answer. Therefore, $f(n) = O(g(n)) $ and $g(n) = O(f(n)) $ since $0 < L < \infty$. 
-  \item $f(n) = 100n + (\log_{}{n})^2$ \hspace{1cm} $g(n) = 100n + \log_{}{n}$ \vspace{1mm} \\
-    Firstly, I need to compare $100n$ with $\log_{}{n}$. \vspace{1mm} \\
-    $\lim_{n\to\infty} \frac{100n}{\log_{}{n}} = 100\cdot\lim_{n\to\infty} \frac{n}{\log_{}{n}} = 100\cdot\lim_{n\to\infty} \frac{1}{\frac{1}{n}} = 100\cdot\infty = \infty$ \vspace{1mm} \\
-    This means $\log_{}{n} = o(100n)$ and when $n\rightarrow\infty$, we should only consider about 100n for g(n). \vspace{1mm} \\
-    Then, I need to compare $100n$ with $(\log_{}{n})^2$. \vspace{1mm} \\
-    $\lim_{n\to\infty} \frac{(\log_{}{n})^2}{100n} = \frac{1}{100} \cdot \lim_{n\to\infty}(\frac{\log{}{n}}{\sqrt{n}})^2 = \frac{1}{100} \cdot \lim_{n\to\infty}(\frac{\ln{n}}{\sqrt{n}})^2$  \vspace{1mm} \\
-    $=\frac{1}{100} \cdot \lim_{n\to\infty}(\frac{\frac{1}{x}}{\frac{1}{2\sqrt{n}}})^2 = \frac{1}{100} \cdot \lim_{n\to\infty}(\frac{2}{\sqrt{n}})^2 = 0$ \vspace{1mm} \\
-    This means $(\log_{}{n})^2 = o(100n)$ and when $n\rightarrow\infty$, we should only consider about 100n for f(n). \vspace{1mm} \\
-    Therefore, $L = \lim_{n\to\infty} \frac{f(n)}{g(n)} = \lim_{n\to\infty} \frac{100n}{100n} = 1  $\vspace{2mm} \vspace{1mm} \\
-    Since, $\lim_{n\to\infty} \frac{g(n)}{f(n)}$ can be proved as the same way and get the same answer. Therefore, $f(n) = O(g(n)) $ and $g(n) = O(f(n)) $ since $0 < L < \infty$.
-  \item $f(n) = n!$ \hspace{1cm} $g(n) = 2^n$ \vspace{1mm} \\
-    Based on Big-O Notation: $g(n) = O(f(n))$ iff there exists a constant c and a fixed $n_0$ such that for all $n > n_0$, $g(n) \leq cf(n)$. \vspace{1mm} \\
-    When $n \geq 4$, $g(n) < f(n)$. However, whatever constant c is, there is not a fixed $n_0$ to satisfy the Big-O notation. Therefore, $g(n) = O(f(n))$.
-\end{enumerate}
-
-
-\pagebreak
-\large Question 2:\\
-\normalsize 
-\begin{enumerate}
-\item Recurrence Relation: \\
-$T(n) = 3 \cdot T(\frac{n}{3}) + O(n^0)$.
-\item Running time:\\
-Based on Master Method, $T(n) = a \cdot T(\frac{n}{b}) + O(n^d)$,\\
-where a = 3, b = 3 and d = 0.\\
-The ${\log_3 3}$ = 1 $>$ 0. \\
-Therefore the result is O($n{\log_3 3}$) = O($n$).
-\end{enumerate}
 
 
 
 \pagebreak
-\large Question 4: \vspace{5mm}\\
-\normalsize 
-\underline{Claim:} if $f(x) = o(g(x))$, then we must have that $f(x) = O(g(x))$. \vspace{2mm}\\
-\underline{Proof:} By contradiction, support $f(x) = o(g(x))$ and $f(x) \neq O(g(x))$ for some $f(x)$ and $g(x)$. Based on Big-O Notation, $f(n) \neq O(g(n))$ means there does \textbf{not} exist a constant c and a fixed $n_0$ such that for all $n > n_0$ , $f(n) \leq cg(n)$. However, in Little-o Notation, $f(x) = o(g(x))$ means, for \textbf{every} c $>$ 0, there exists a fixed $n_0$ such that for all $n > n_0$, $f(n) \leq cg(n)$. There is contradiction, so my supposition is incorrect. Therefore, original proposition is true.
-
-
-\pagebreak
-\noindent
 \large Question 5: \vspace{5mm}\\
 \normalsize 
-\begin{algorithm}
-\begin{algorithmic}
-\Function{find}{$A$, left, right}
-    \State \textbf{while} $right == 1$:
-    \State \hspace{0.8cm}  left = right
-    \State \hspace{0.8cm}  $right = right * 2$
-    \State \textbf{}$midpoint = left + (right - left) / 2$
-    \State \textbf{if} $A[midpoint] == 1$ and $A[midpoint + 1] == $ "error message":
-    \State \hspace{0.8cm}  \textbf{return} $midpoint$
-    \State \textbf{else if} $A[midpoint] == 1$:
-    \State \hspace{0.8cm}  \textbf{return find}($A$, midpoint, right)
-    \State \textbf{else}:
-    \State \hspace{0.8cm}  \textbf{return find}($A$, left, midpoint)
-\EndFunction
-\end{algorithmic}
-\end{algorithm}\vspace{3mm}\\
-I use two pointers, left and right, to traverse the given array. Initialize left = 0 and right = 1. Then use a while loop to double left and right each time until right returns an error message. When right first returns an error message, it means right is out off the bounds of array A. And since left always equals to the previous right, the n will be in the range from left to right. Then we can use binary search to find n. Declare a variable midpoint which is the middle point of left and right. If the midpoint returns 1 and its next returns error message, the midpoint is the bounds and return it. If midpoint still returns 1 and its next is not error message, the bounds is in range from midpoint to right. Then ecursively call function and limit the range from midpoint to right. Otherwise, the midpoint exceeds the bound of array and we recursively call function and limit the range from left to midpoint. \vspace{5mm}\\
-For the while loop, since it double each time and the first iteration takes the longest time, the worest running time of while loop is $log_2{n}$. For the recurrence part, I shrink half of current range each time, so using the Master Method, the b is 2 and a is 1. The loop part only works when we need to find bounds, so the d is 0. The Recursion Relation is $T(n) = T(\frac{n}{2}) + O(n^0) + O(\log_{2}{n})$ $log_b{a} = 0 = d$. Therefore, the running time is $O(n^d\cdot \log_{}{n})$ = $O(\log_{}{n})$.
+\setlength{\baselineskip}{8mm}
+\underline{Proof:} \par
+No, this algorithm does not always work. Here is a counter example: \\
+\includegraphics[width=4cm, height=3cm]{undriect} \par
+Obviously, the shortest cycle is obviously $A-B-E-A$. However, this is an undirected graph. When we run DFS on the graph and create the DFS tree, it's possible to create a DFS tree as following. \\
+\includegraphics[width=4cm, height=4cm]{tree} \par
+Depending on above DFS tree, the shortest cycle is B-C-D-E-B. When we run DFS on the undirected graph, the we do not know the best traversal path. 
+If traversal path is in alphabetical order, node E will be prematurely explored. So the back edge (E, A) will appear to be longer than (E, B). \par
+Therefore, algorithm does not always work.
 
-
-\pagebreak
-\noindent
-\large Question 6:\\
-\normalsize 
-\begin{algorithm}
-\begin{algorithmic}
-\Function{check}{L, K, start, sum result}:
-    \State \textbf{if} result == False:
-    \State \hspace{0.8cm}  \textbf{return} result
-    \State \textbf{if} $sum < (len(K))^2$:
-    \State \hspace{0.8cm}  result = False
-    \State \hspace{0.8cm}  \textbf{return} result
-    \State \textbf{for} i in range(start, len(L)):
-    \State \hspace{0.8cm} K.add(L[i])
-    \State \hspace{0.8cm} result \&\& check(L, K, i + 1, sum+L[i], result)
-    \State \textbf{return} result
-\EndFunction \\
-\end{algorithmic}
-\end{algorithm}\vspace{3mm}\\
-
-For this question, I design a fucntion check() to find and check all subsets $K \subseteq L$. At beginning, initials K as an empty set, start = 0, sum = 0 and result = True. The variable sum is the sum of elements in current $K$.  If there exists a subset K that $sum < |K|^2$, then the claim is false and returns the result as False. Otherwise, check other possible subsets. The $L[start]$ is the first element of current $K$. Recursively find all possible subsets with first element $L[start]$. After that, move start to next and recursively find all possible subsets with first element $L[start+1]$. For each recursion, let result \&\& with return of recursion. As long as there exists a result that is Flase, the final result will be False. Otherwise, the claim is True. \vspace{3mm}\\
-The running time is $O(2^n)$ since there are $2^n$ subsets which we need to check.
 
 
 
 \pagebreak
-\noindent
-\large \textbf{Extra}:\\
+\large \textbf{Extra}:\\ \vspace{5mm}\par
 \normalsize 
+\setlength{\baselineskip}{8mm}
+My algorithm is similar to Breadth-first search. First find all cities from City S with a cable which is less than L. Record the visited edges and cities. 
+Then find all cities from visited cities with cables which are less than L. 
+If cities or edges are visited, it means there is a shortest path to this cities and stop travers current path because it is not optimal.
+Repeat this process untill find City T. \par
+In the worst case, we traverse all edges. Therefore, the running time is $O(|E|)$.
 
 
-If $f(x) = O(g(x))$, it must be the case that $\lim_{x\to\infty} f(x)/g(x) = c$, for some finite $c$. Let $L = \lim_{x\to\infty} f(x)/g(x)$. If $L = \infty$, then $g(x) = o(f(x))$ and $f(x) = \omega(g(x))$. Based on Little-o-notation, if $g(x) = o(f(x)) $, then for every $c > 0$, there exists a fixed $x_0$ such that for all $x > x_0$, $g(n) \leq cf(x)$. Therefore, there does \textbf{not} exists a constant c and a fixed $n_0$ such that for all $n > n_0$, $f(n) \leq cg(n)$. So based on Big-O-notation, $f(n) \neq O(g(n))$. Hence, when $\lim_{x\to\infty} f(x)/g(x) = c$, for some finite $c$, $f(x) = O(g(x))$.
 
 
 
-
-  
  \end{document} 
 
 
