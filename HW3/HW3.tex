@@ -39,7 +39,7 @@
 
 \begin{minipage}[t]{0.25\linewidth}
 \textbf{\Large
-  HW \# \underline{ 2 }
+  HW \# \underline{ 3 }
 } 
 
 \end{minipage} \vspace*{3ex}
@@ -68,15 +68,11 @@
 
 \noindent
   If you answered \textbf{Yes} to one or more questions, please give the details here: \vspace*{5ex} \par
-  I consulted all questions with teaching assistant, Reyhaneh Abdolazimi, to confirm my understanding of all questions are correct. I also consulted question3 with teaching assistant, Arash Sahebolamri. 
+  I consulted question 5 with teaching assistant, Siddhartha Roy Nandi, to confirm my understanding of all questions are correct. 
   I also consult all questions and extra question with another student, Wentian Bai. For all questions, we discussed our ideas and I finish my algorithms independently. 
   For the extra question, we discussed our understandings and I write my explanation independently.  \vspace*{5ex} \\
 
-  I view some mathematical formulas online.
-  \begin{itemize}
-    \item \href{url}{https://math.stackexchange.com/questions/1036002/proving-number-of-edges-in-f-n-k} 
-    \item \href{url}{https://en.wikipedia.org/wiki/Bucketsort} 
-  \end{itemize}
+ 
 
 \vfill
 \end{minipage}
@@ -98,34 +94,51 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 \noindent
 \large Question 1: \vspace{5mm} \par
 \normalsize 
-First find the midpoint to divide given array A into two parts. If $midpoint < A[midpoint]$, then recursively find right part. Otherwise, recursively find the left part.
-If current midpoint equals to the A[midpoint], it means the given array has an index $i$ such that $A[i] = i$. 
-When the length of current array is one and there is not an index $i$ such that $A[i] = i$, just return false.
-
+For each node, count the number of shortest path from start node $s$.
+\begin{itemize}
+  \item	Using Dijkstra’s shortest-path algorithm for all nodes $u$ reachable from $s$. 
+	Finally get a table to record the distance of every nodes from $s$ to $u$. The $\textbf{dist(u)}$ represents the distance from $s$ to $u$. 
+  \item For each node in the table, add a new attribute called $\textbf{Path}$ to record the number of shortest path from $s$ to current node. 
+	The $\textbf{path(u)}$ represents the numbers of shortest path from $s$ to $u$. For all nodes $u \in V$, initialize $path(u)$ = 0. Initialize $path(s)$ to 1. 
+	 \par
+	\begin{table}[h!]
+	  \begin{center}
+	    \label{tab:table1}
+	    \begin{tabular}{l|c|r}
+	      \textbf{Node} & \textbf{Distance} & \textbf{Path}\\
+	      \hline
+	      S & 0 & 1\\
+	      A & 3 & 0\\
+	      B & 2 & 0\\
+	      C & 5 & 0\\
+	      D & 6 & 0\\
+	    \end{tabular}
+	  \end{center}
+	\end{table}
+  \item Modify Dijkstra’s shortest-path algorithm.
+	In modified algorithm, we do not change any $dist(v)$ because we have already recorded all distances of every nodes. 
+	Instead, when $dist(v) == dist(u) + l(u, v)$, let $path(v) = path(v) + path(u)$. The rest remains unchanged.
+  \item After running modified algorithm, for each nodes u, the $\textbf{dist(u)}$ is the numbers of shortest parth from start node to itself. 
+\end{itemize}
 
 \begin{algorithm}
 \begin{algorithmic}
-\Function{find}{int[] $A$, left, right}
-  \State \textbf{}$midpoint = left + (right - left) / 2$
-  \State \textbf{if} $midpoint == A[midpoint]$:
-  \State \hspace{0.8cm}  \textbf{return} $True$
-  \State \textbf{if} $length(A) == 1$:
-  \State \hspace{0.8cm}  \textbf{return} $False$
-  \State \textbf{else if} $midpoint < A[midpoint]$:
-  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint \rightarrow right$)
-  \State \textbf{else}:
-  \State \hspace{0.8cm} \textbf{return find}($A, left \rightarrow midpoint$)
-\EndFunction
+\State \textbf{Modified Dijkstra’s shortest-path algorithm:}
+\State \hspace{0.2cm} H = makequeue(V)
+\State \hspace{0.2cm} \textbf{while} H is not empty :
+\State \hspace{0.8cm} \textbf{} $u$ = deletemin(H)
+\State \hspace{0.8cm} \textbf{for} all $edges (u, v) \in E$:
+\State \hspace{1.6cm} \textbf{if} $dist(v) == dist(u) + l(u, v)$: 
+\State \hspace{2.4cm} \textbf{} $path(v) = path(v) + path(u)$
+\State \hspace{2.4cm} \textbf{} $prev(v) = u$
+\State \hspace{2.4cm} \textbf{} $decreasekey(H, v)$
 \end{algorithmic}
 \end{algorithm}
-
-\textbf{running time:} \\
-The recurrence relation is $T(n) = T(\frac{n}{2}) + O(1)$.\\
-Based on Master Method \par
-$a = 1$  (only one recursive call will return in each function) \par
-$b = 2$  (split the array A into two parts) \par
-$d = 0$ (other operations take constant time)\\ 
-Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}}) = O(\log_{}{n})$  
+\noindent \\
+\textbf{running time:} \par
+The running time of Modified Dijkstra’s shortest-path algorithm is the same as the time of original algorithm because the change part costs the same time as replaced part. \par
+Thus, the final running time is double of running time of Dijkstra’s shortest-path algorithm. 
+The final time is $O((|V| + |E|)\log_{}{|V|})$
 
 
 
@@ -133,87 +146,113 @@ Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}})
 \noindent
 \large Question 2: \vspace{5mm} \par
 \normalsize 
-Divide given array A into two parts and check its midpoint. 
+My goal is to maximize the number of lectures. Thus, my idea is trying to add short lectures without overlap. By hint, my algorithm is:
 \begin{itemize}
-  \item If A[midpoint] is both less than its adjacent values, it is the local minimum. If A[midpoint] is the first or last element of A, only compare with single adjacent element.
-  \item If the $A[midpoint] >  A[midpoint+1]$, there must exist a local minimum in the right part. Even if the right part is in decreasing order, the last element also meets the requirements. 
-	Thus, recursively call function to find right part of given array. 
-  \item Otherwise, recursively find its left part. Even if the left part is in increasing order, the first elelment meets the requirements.
+  \item	Sort all lectures by their end time. Declare two variables, $tail$ and $result$.
+	The variable $tail$ represents the end time of last lecture. The variable $result$ counts the numbers of lecture which I am able to attend.
+  \item Iterate through sorted lectures. 
+  \item If current lecture whose start time is later than or equal to the end time of last lecture, then I am able to attend current lecture. 
+	add one to $result$.
+  \item Otherwise, this will be an overlap, ignore current lecture.
 \end{itemize}
-
 
 \begin{algorithm}
 \begin{algorithmic}
-\Function{find}{int[] $A$, left, right}
-  \State \textbf{if length(A)==1}:
-  \State \hspace{0.8cm} \textbf{return} $A[0]$
-  \State \textbf{}$midpoint = left + (right - left) / 2$
-  \State \textbf{if} $A[midpoint]$ less than its adjacent values:
-  \State \hspace{0.8cm}  \textbf{return} $midpoint$
-  \State \textbf{else if} $A[midpoint] > A[midpoint + 1]$:
-  \State \hspace{0.8cm}  \textbf{return find}($A, midpoint \rightarrow right$)
-  \State \textbf{else}:
-  \State \hspace{0.8cm} \textbf{return find}($A, left \rightarrow midpoint$)
-\EndFunction
+\State \textbf{Sort} all lectures by end time
+\State result = 0, tail = $-\infty$
+\State \textbf{for} every $\textbf{i} \in lectures$ :
+\State \hspace{0.8cm} \textbf{if} $s_i$ $\geq$ tail
+\State \hspace{1.6cm} \textbf{} tail = $e_i$
+\State \hspace{1.6cm} \textbf{} result++
 \end{algorithmic}
 \end{algorithm}
-
-\textbf{running time:} \\
-The recurrence relation is $T(n) = T(\frac{n}{2}) + O(1)$.\\
-Based on Master Method \par
-$a = 1$  (only one recursive call will return in each function) \par
-$b = 2$  (split the array A into two parts) \par
-$d = 0$ (other operations take constant time)\\ 
-Thus, $\log_{b}{a} = \log_{2}{1} = 0 = d \Rightarrow T(n) = O({n^0}{\log_{}{n}}) = O(\log_{}{n})$  
+\noindent \\
+\textbf{running time:} \par
+The sorting all lectures uses $O(n\log_{}{n})$. Iteration through sorted lectures uses $O(n)$.
+The final time is $O(n\log_{}{n}) + O(n) = O(n\log_{}{n})$
 
 
 \pagebreak
+\noindent
 \large Question 3: \vspace{5mm} \par
 \normalsize 
 \setlength{\baselineskip}{8mm}
-Based on description of HybridSort, there are 3 cases for $n-size$ input.\par 
-The first is that the depth of recursion tree is less than r. In this case, this algrothm is the same as MergeSort. Thus, the running time is $O(n\log{}{n})$. \par
-The second is the algorithm recurses to a depth of $r$ and all resulting subarrays have size 1. In this case, $\log{}{n} = r$ so the running time is $O(n \cdot r)$. \par
-The last is the algorithm recurses to a depth of $r$ and all resulting subarrays have size larger than 1. 
-Let $m$ denotes $2^r$.
-Since the depth of recursion tree is $r$,  there are the $2^r$ number of resulting subarrays and the size of each resulting subarray is $\frac{n}{2^r}$.
-We use InsertionSort to sort each resulting subarry, so the worst running time of each InsertionSort is $(\frac{n}{2^r})^2$.
-There are $2^r$ numbers of  resulting subarrays, so the time is $(2^r) \cdot (\frac{n}{2^r})^2 = \frac{n^2}{2^r} $. Therefore, the time for subarrays sorting is $O(\frac{n^2}{2^r})$. 
-The merge part is the same as MergeSort, so the running time of this MergeSort is $O(r \cdot n)$.  \par
-When we consider the running time of some algorithms, the running time often refers to the worst running time. Thus, we ignore the first two cases.
-The total time should combine the running time of MergeSort and InsertionSort. Thus, the time is $O(\frac{n^2}{2^r} + r \cdot n)$\\
+Based on description of question, I only need to give a \textbf{reasonable greedy} algorithm. \par
+For current city, I will find another city which is not visited and has the shortest distance between it and current city.
+Then mark current city as visited and move to newly found city.
+Repeat this step. \par
+My algorithm will not always find the correct answer. For example: \\
+\includegraphics[width=9cm, height=6cm]{question3image} \\
+1. In this graph, we begin at $C_0$. The shortest distance is $C_0 \rightarrow C_1$. Move to $C_1$ and mark $C_0$ as visited. \\
+2. Then at $C_1$, the shortest distacne is $C_1 \rightarrow C_2$ without visited cities. Move to $C_2$ and mark $C_1$ as visited. \\
+3. Then at $C_2$, the shortest distacne is $C_2 \rightarrow C_3$ without visited cities. Move to $C_3$ and mark $C_2$ as visited. \\
+4. Then at $C_3$, the shortest distacne is $C_3 \rightarrow C_4$ without visited cities. Move to $C_4$ and mark $C_3$ as visited. \\
+5. All cites visited and back to $C_0$. \par
+The total distacne is $2+2+11+5 = 20$.
+However, if we follow the path $C_0 \rightarrow C_2 \rightarrow C_1 \rightarrow C_3 \rightarrow C_0$, the total distance will be $3+2+3+5=13$.
+Thus, my algorithm does works but does not find the correct answer. \\
+\noindent \\
+\textbf{running time:} \par
+My algorithm visits all cities exactly once. Thus the time is $O(|V|)$, where $|V|$ means the number of all cities.
 
 
 \pagebreak
-\large Question 4: \vspace{5mm}\\
+\noindent
+\large Question 4: \par
 \normalsize 
 \setlength{\baselineskip}{8mm}
+Based on description of question, I think this procedure does not give me the correct shortest path from $s$ to $t$.
+For example: \\
+\includegraphics[width=12cm, height=4cm]{question4image} \par
+In this example, we parallely use Dijkstra’s algorithm for node $t$ and node $s$. 
+Since the length $l(s, A)$ is shorter than $l(s, C)$ and $l(t, B)$ is shorter than $l(t, F)$, the $dist(A)$ will be smaller than $dist(C)$ and $dist(B)$ will be smaller than $dist(B)$.
+Then there will be a overlap between node $A$ and node $B$ without finding the real shortest path. 
+Based on description, $d_1 = 5 + 11$, $d_2 = 5$, $d_1 + d_2 = 21$. This is incorrect. \par
+Thus, this algorithm does not find the correct answer. \\
 
-\underline{Claim:} Based on description, each component of forest is a tree. I need to prove that the number of trees in a forest equals to sum of all nodes minus sum of all edges. \vspace{5mm}\par
-\underline{Proof:} \par
-If there are a number $c$ of components in forest G, then the sum of all nodes in G is $\sum_{j=1}^{c} {n_j} $, where ${n_j}$ is the number of nodes in its component. \par 
-Then the sum of all edges in G is $\sum_{j=1}^{c} {k_j} $, where ${k_j}$ is the number of edges in its component. \par
-The sum of all nodes minus sum of all edges is $ n - k = \sum_{j=1}^{c} {n_j} - \sum_{j=1}^{c} {k_j}  = \sum_{j=1}^{c} {(n_j - k_j)}$. 
-We know each component of forest is a tree, and for each tree the number of its nodes minus its edges equals to 1, $|V| - |E| = 1$.
-Thus, the formula can be transform to $n - k = \sum_{j=1}^{c} {(n_j - k_j)} = \sum_{j=1}^{c} 1 = c$.
-Therefore, the claim holds.
 
+\pagebreak
+\noindent
+\large Question 5: \\
+\normalsize 
+\setlength{\baselineskip}{8mm}
+\noindent
+\textbf{(1):} \par
+Based on description of question, I think the directed graph G seems as below. \\
+\includegraphics[width=14cm, height=3cm]{question5image} \par
+The infinite path $p$ is infinite sequence $s, a, b, c, d, b, c ,d, b, c, ..., b, c, d, f$, where "..." is infinite. 
+The $Inf(p)$ will be a set $\{b, c, d\}$. \\
+\\
+\textbf{Claim: } If $p$ is an infinite path of $G$, then the $Inf(p)$ is a subset of a single strongly connected component of $G$. \\
+\textbf{Proof: } By contradiction. Suppose $p$ is an infinite path of $G$, and the $Inf(p)$ is not a subset of a single strongly connected component of $G$. 
+Based on description and my example, the vertices in an infinite path $p$ are visited infinitely often because there is a cycle. 
+The $Inf(p)$ is the set of vertices that occur infinitely many times in p. Therefore, the vertices in this set are connected by some directed path.
+The defination of SCC is: in a directed graph, SCC is a set of nodes such that there is a (directed) path between every pair in both directions.
+Based on defination of SCC, for each set of a single strongly connected component of $G$, their nodes are connected by a path. 
+Since the vertices in $Inf(p)$ are all connected, the $Inf(p)$ must be a subset of a single strongly connected component of G. 
+There is a contradiction and my suppose is incorrect. The claim holds.
 
 
 
 \pagebreak
-\large Question 5: \vspace{5mm}\\
+\noindent
+\large Question 6: \\
 \normalsize 
 \setlength{\baselineskip}{8mm}
-\underline{Proof:} \par
-No, this algorithm does not always work. Here is a counter example: \\
-\includegraphics[width=4cm, height=3cm]{undriect} \par
-Obviously, the shortest cycle is obviously $A-B-E-A$. However, this is an undirected graph. When we run DFS on the graph and create the DFS tree, it's possible to create a DFS tree as following. \\
-\includegraphics[width=4cm, height=4cm]{tree} \par
-Depending on above DFS tree, the shortest cycle is B-C-D-E-B. When we run DFS on the undirected graph, the we do not know the best traversal path. 
-If traversal path is in alphabetical order, node E will be prematurely explored. So the back edge (E, A) will appear to be longer than (E, B). \par
-Therefore, algorithm does not always work.
-
+\noindent
+\textbf{(2):} \par
+If graph $G$ has an infinite path, then there will be a cycle in $G$.
+Since $G$ has a finite number of vertices, only in a cycle, some vertices of $G$ are able to be visited infinitely often. \par
+Thus, my algorithm is to determine if $G$ has a cycle.
+I use DFS on $G$. If depth-first search reveals a back edge of a directed graph $G$, $G$ has a cycle and there is a infinite path. 
+If we explore all nodes and there does not exist a back edge, then $G$ does not has an infinite path.   \\
+\\
+\textbf{Claim: } If the DFS reveals a back edge, the graph has a cycle.\\
+\textbf{Proof: } let $(c, s)$ be a back edge from node $c$ to node $s$. By definition of back edge, $s$ is an ancestor of $c$.
+In the DFS tree, there is a path from $s$ to $c$. The path $s \rightarrow c$ and back edge $(c, s)$ form a cycle. The claim holds. \\
+\\
+\textbf{running time:} \par
+My algorithm is the same as basic DFS. Thus my running time is $O(|V| + |E|)$.
 
 
 
