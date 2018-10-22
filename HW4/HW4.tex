@@ -39,7 +39,7 @@
 
 \begin{minipage}[t]{0.25\linewidth}
 \textbf{\Large
-  HW \# \underline{ 3 }
+  HW \# \underline{ 4 }
 } 
 
 \end{minipage} \vspace*{3ex}
@@ -93,44 +93,21 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 \noindent
 \large Question 1: \vspace{5mm} \par
 \normalsize 
-For each node, count the number of shortest path from start node $s$.
+My algorithm is.
 \begin{itemize}
-  \item	Using Dijkstra’s shortest-path algorithm for all nodes $u$ reachable from $s$. 
-	Finally get a table to record the distance of every nodes from $s$ to $u$. The $\textbf{dist(u)}$ represents the distance from $s$ to $u$. 
-  \item For each node in the table, add a new attribute called $\textbf{Path}$ to record the number of shortest path from $s$ to current node. 
-	The $\textbf{path(u)}$ represents the numbers of shortest path from $s$ to $u$. For all nodes $u \in V$, initialize $path(u)$ = 0. Initialize $path(s)$ to 1. 
-	 \par
-	\begin{table}[h!]
-	  \begin{center}
-	    \label{tab:table1}
-	    \begin{tabular}{l|c|r}
-	      \textbf{Node} & \textbf{Distance} & \textbf{Path}\\
-	      \hline
-	      S & 0 & 1\\
-	      A & 3 & 0\\
-	      B & 2 & 0\\
-	      C & 5 & 0\\
-	      D & 6 & 0\\
-	    \end{tabular}
-	  \end{center}
-	\end{table}
-  \item Modify Dijkstra’s shortest-path algorithm.
-	In modified algorithm, we do not change any $dist(v)$ because we have already recorded all distances of every nodes. 
-	Instead, when $dist(v) == dist(u) + l(u, v)$, let $path(v) = path(v) + path(u)$. The rest remains unchanged.
-  \item After running modified algorithm, for each nodes u, the $\textbf{dist(u)}$ is the numbers of shortest parth from start node to itself. 
+  \item	Place one guard at $l_1 + 1$ location, where 1 represent the 1 unit of distance. 
+  \item move along the hallway until there is a painting $l_m$ , which is not protected. Place one guard at $l_m + 1$ location.
+  \item Repeat the second step until all paintings are protected. 
 \end{itemize}
 
 \begin{algorithm}
 \begin{algorithmic}
-\State \textbf{Modified Dijkstra’s shortest-path algorithm:}
-\State \hspace{0.2cm} H = makequeue(V)
-\State \hspace{0.2cm} \textbf{while} H is not empty :
-\State \hspace{0.8cm} \textbf{} $u$ = deletemin(H)
-\State \hspace{0.8cm} \textbf{for} all $edges (u, v) \in E$:
-\State \hspace{1.6cm} \textbf{if} $dist(v) == dist(u) + l(u, v)$: 
-\State \hspace{2.4cm} \textbf{} $path(v) = path(v) + path(u)$
-\State \hspace{2.4cm} \textbf{} $prev(v) = u$
-\State \hspace{2.4cm} \textbf{} $decreasekey(H, v)$
+\State guard $\leftarrow$ $l_1 + 1$
+\State num $\leftarrow$ 1
+\State \hspace{0.4cm} \textbf{For} i = 2 to k :
+\State \hspace{0.8cm} \textbf{If} guard $<$ $l_i$
+\State \hspace{1.2cm} \textbf{} guard $\leftarrow$ $l_i + 1$
+\State \hspace{1.2cm} \textbf{} num $\leftarrow$ $num + 1$
 \end{algorithmic}
 \end{algorithm}
 \noindent \\
@@ -145,30 +122,38 @@ The final time is $O((|V| + |E|)\log_{}{|V|})$
 \noindent
 \large Question 2: \vspace{5mm} \par
 \normalsize 
-My goal is to maximize the number of lectures. Thus, my idea is trying to add short lectures without overlap. By hint, my algorithm is:
+My goal is to maximize the amount of payment. Thus, my idea is trying to assign the high-paying jobs to the slot just before their deadline. My algorithm is:
 \begin{itemize}
-  \item	Sort all lectures by their end time. Declare two variables, $tail$ and $result$.
-	The variable $tail$ represents the end time of last lecture. The variable $result$ counts the numbers of lecture which I am able to attend.
-  \item Iterate through sorted lectures. 
-  \item If current lecture whose start time is later than or equal to the end time of last lecture, then I am able to attend current lecture. 
-	add one to $result$.
-  \item Otherwise, this will be an overlap, ignore current lecture.
+  \item	Sort all jobs by their payments in decreasing order. 
+	Denote the elements of sorted list as $J_1, J_2, ..., J_m$, and for each job $J_i$, $i \leftarrow 1...m $, $p_i \leq p_{i+1}$ .
+  \item	Schedule $J_1$ to time slot from time $d_1-1$ to time $d_1$. 
+  \item Iterate through the list of remaining jobs in order, and at each step $i$, check whether we can schedule current job $J_i$ from time $d_i-1$ to time $d_i$. \\
+	If this time slot is already scheduled with other job, traverse the schedule forward from time $d_i-1$ and find whether there is a empty slot to schedule current job. \\ 
+	If there is not a empty slot after traversing, we will abandon this job.
+  \item After going through list, the schedule is expected result. 
 \end{itemize}
 
 \begin{algorithm}
 \begin{algorithmic}
-\State \textbf{Sort} all lectures by end time
-\State result = 0, tail = $-\infty$
-\State \textbf{for} every $\textbf{i} \in lectures$ :
-\State \hspace{0.8cm} \textbf{if} $s_i$ $\geq$ tail
-\State \hspace{1.6cm} \textbf{} tail = $e_i$
-\State \hspace{1.6cm} \textbf{} result++
+\State \textbf{Sort} all jobs by their payments in decreasing order.
+\State schedule[m] \textbf{ //} m-size array
+\State schedule[$d_1$] $\leftarrow$ $J_1$
+\State \textbf{For} i = 2 to m :
+\State \hspace{0.4cm} \textbf{If} schedule[$d_i$] \textbf{is} empty
+\State \hspace{0.8cm} \textbf{}schedule[$d_i$] $\leftarrow J_i$
+\State \hspace{0.4cm} \textbf{Else :}
+\State \hspace{0.8cm} \textbf{For} k = $d_i-1$ to 1
+\State \hspace{1.2cm} \textbf{If} schedule[k] \textbf{is} empty
+\State \hspace{1.6cm} \textbf{} schedule[k] $\leftarrow J_i$
+\State \textbf{Return} schedule
 \end{algorithmic}
 \end{algorithm}
 \noindent \\
 \textbf{running time:} \par
-The sorting all lectures uses $O(n\log_{}{n})$. Iteration through sorted lectures uses $O(n)$.
-The final time is $O(n\log_{}{n}) + O(n) = O(n\log_{}{n})$
+The sorting all jobs uses $O(n\log_{}{n})$. 
+When we iterate through sorted jobs, for each job, we may need to traverse the schedule forward which uses $O(n)$ time.
+Therefore, whole iteration need $O(n^2)$ time. \par
+The final time is $O(n\log_{}{n}) + O(n^2) = O(n^2)$
 
 
 \pagebreak
@@ -181,7 +166,7 @@ For current city, I will find another city which is not visited and has the shor
 Then mark current city as visited and move to newly found city.
 Repeat this step. \par
 My algorithm will not always find the correct answer. For example: \\
-\includegraphics[width=9cm, height=6cm]{question3image} \\
+
 1. In this graph, we begin at $C_0$. The shortest distance is $C_0 \rightarrow C_1$. Move to $C_1$ and mark $C_0$ as visited. \\
 2. Then at $C_1$, the shortest distacne is $C_1 \rightarrow C_2$ without visited cities. Move to $C_2$ and mark $C_1$ as visited. \\
 3. Then at $C_2$, the shortest distacne is $C_2 \rightarrow C_3$ without visited cities. Move to $C_3$ and mark $C_2$ as visited. \\
@@ -202,7 +187,7 @@ My algorithm visits all cities exactly once. Thus the time is $O(|V|)$, where $|
 \setlength{\baselineskip}{8mm}
 Based on description of question, I think this procedure does not give me the correct shortest path from $s$ to $t$.
 For example: \\
-\includegraphics[width=12cm, height=4cm]{question4image} \par
+ \par
 In this example, we parallely use Dijkstra’s algorithm for node $t$ and node $s$. 
 Since the length $l(s, A)$ is shorter than $l(s, C)$ and $l(t, B)$ is shorter than $l(t, F)$, the $dist(A)$ will be smaller than $dist(C)$ and $dist(B)$ will be smaller than $dist(B)$.
 Then there will be a overlap between node $A$ and node $B$ without finding the real shortest path. 
@@ -218,7 +203,7 @@ Thus, this algorithm does not find the correct answer. \\
 \noindent
 \textbf{(1):} \par
 Based on description of question, I think the directed graph G seems as below. \\
-\includegraphics[width=14cm, height=3cm]{question5image} \par
+ \par
 The infinite path $p$ is infinite sequence $s, a, b, c, d, b, c ,d, b, c, ..., b, c, d, e, f$, where "..." is infinite loop. 
 The $Inf(p)$ will be a set $\{b, c, d\}$. \\
 \\
