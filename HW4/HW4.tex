@@ -93,15 +93,17 @@ By submitting this sheet through my Blackboard account, I assert that the inform
 \noindent
 \large Question 1: \vspace{5mm} \par
 \normalsize 
-My algorithm is.
+My algorithm is :
 \begin{itemize}
+  \item Sort the locations of the paintings in increasing order. The locations of sorted paintings are $l_1$, ..., $l_k$.
   \item	Place one guard at $l_1 + 1$ location, where 1 represent the 1 unit of distance. 
   \item move along the hallway until there is a painting $l_m$ , which is not protected. Place one guard at $l_m + 1$ location.
-  \item Repeat the second step until all paintings are protected. 
+  \item Repeat the third step until all paintings are protected. 
 \end{itemize}
 
 \begin{algorithm}
 \begin{algorithmic}
+\State \textbf{Sort} locations of the paintings in increasing order \\
 \State guard $\leftarrow$ $l_1 + 1$
 \State num $\leftarrow$ 1
 \State \hspace{0.4cm} \textbf{For} i = 2 to k :
@@ -112,9 +114,8 @@ My algorithm is.
 \end{algorithm}
 \noindent \\
 \textbf{running time:} \par
-The running time of Modified Dijkstra’s shortest-path algorithm is the same as the time of original algorithm because the change part costs the same time as replaced part. \par
-Thus, the final running time is double of running time of Dijkstra’s shortest-path algorithm. 
-The final time is $O((|V| + |E|)\log_{}{|V|})$
+Sorting uses $O(nlog_{}{n})$ time. We iterate through sorted paintings once using $O(n)$ time.
+The final time is $O(nlog_{}{n}) + O(n)$ = $O(nlog_{}{n})$
 
 
 
@@ -122,36 +123,38 @@ The final time is $O((|V| + |E|)\log_{}{|V|})$
 \noindent
 \large Question 2: \vspace{5mm} \par
 \normalsize 
-My goal is to maximize the amount of payment. Thus, my idea is trying to assign the high-paying jobs to the slot just before their deadline. My algorithm is:
+My goal is to maximize the amount of payment. Thus, my idea is trying to schedule the high-paying jobs in the time slot just before their deadline. My algorithm is:
 \begin{itemize}
   \item	Sort all jobs by their payments in decreasing order. 
-	Denote the elements of sorted list as $J_1, J_2, ..., J_m$, and for each job $J_i$, $i \leftarrow 1...m $, $p_i \leq p_{i+1}$ .
-  \item	Schedule $J_1$ to time slot from time $d_1-1$ to time $d_1$. 
-  \item Iterate through the list of remaining jobs in order, and at each step $i$, check whether we can schedule current job $J_i$ from time $d_i-1$ to time $d_i$. \\
-	If this time slot is already scheduled with other job, traverse the schedule forward from time $d_i-1$ and find whether there is a empty slot to schedule current job. \\ 
-	If there is not a empty slot after traversing, we will abandon this job.
-  \item After going through list, the schedule is expected result. 
+	The sorted jobs are $J_1, J_2, ..., J_m$, and for each job $J_i$, $p_i \leq p_{i+1}$ .
+  \item	Schedule $J_1$ in a time slot from time $d_1-1$ to time $d_1$. 
+  \item Iterate through the list of remaining jobs in order, and at each step $i$, check whether we can schedule current job $J_i$ from time $d_i-1$ to time $d_i$.
+	\begin{itemize}
+	\item If this time slot is already scheduled for a job, traverse the timeline forward from time $d_i-1$ and find whether there is a empty slot to schedule current job.
+	\item If there is not a empty slot after traversing, we will not schedule this job.
+  	\end{itemize}
+  \item After going through list, the timeline is expected result. 
 \end{itemize}
 
 \begin{algorithm}
 \begin{algorithmic}
 \State \textbf{Sort} all jobs by their payments in decreasing order.
-\State schedule[m] \textbf{ //} m-size array
-\State schedule[$d_1$] $\leftarrow$ $J_1$
+\State timeline[m] \textbf{ //} m-size array
+\State timeline[$d_1$] $\leftarrow$ $J_1$
 \State \textbf{For} i = 2 to m :
-\State \hspace{0.4cm} \textbf{If} schedule[$d_i$] \textbf{is} empty
-\State \hspace{0.8cm} \textbf{}schedule[$d_i$] $\leftarrow J_i$
+\State \hspace{0.4cm} \textbf{If} timeline[$d_i$] \textbf{is} empty
+\State \hspace{0.8cm} \textbf{}timeline[$d_i$] $\leftarrow J_i$
 \State \hspace{0.4cm} \textbf{Else :}
 \State \hspace{0.8cm} \textbf{For} k = $d_i-1$ to 1
-\State \hspace{1.2cm} \textbf{If} schedule[k] \textbf{is} empty
-\State \hspace{1.6cm} \textbf{} schedule[k] $\leftarrow J_i$
-\State \textbf{Return} schedule
+\State \hspace{1.2cm} \textbf{If} timeline[k] \textbf{is} empty
+\State \hspace{1.6cm} \textbf{} timeline[k] $\leftarrow J_i$
+\State \textbf{Return} timeline
 \end{algorithmic}
 \end{algorithm}
 \noindent \\
 \textbf{running time:} \par
 The sorting all jobs uses $O(n\log_{}{n})$. 
-When we iterate through sorted jobs, for each job, we may need to traverse the schedule forward which uses $O(n)$ time.
+When we iterate through sorted jobs, for some jobs, we may need to traverse the timeline forward which uses $O(n)$ time.
 Therefore, whole iteration need $O(n^2)$ time. \par
 The final time is $O(n\log_{}{n}) + O(n^2) = O(n^2)$
 
@@ -160,83 +163,165 @@ The final time is $O(n\log_{}{n}) + O(n^2) = O(n^2)$
 \noindent
 \large Question 3: \vspace{5mm} \par
 \normalsize 
-\setlength{\baselineskip}{8mm}
-Based on description of question, I only need to give a \textbf{reasonable greedy} algorithm. \par
-For current city, I will find another city which is not visited and has the shortest distance between it and current city.
-Then mark current city as visited and move to newly found city.
-Repeat this step. \par
-My algorithm will not always find the correct answer. For example: \\
+I need to consider all possible ways from the first rental shop to the last rental shop. 
+Based on dynamic programming, I will record the minimum costs of traversed shop to avoid re-computations. 
+My algorithm is:
+\begin{itemize}
+  \item	Initialize C[1] to 0, which means that there is no cost from first shop to first shop.  
+	For other C[2]...C[n], initialize to $c_{1 2} ... c_{1 n}$, 
+	which we suppose the cheapest cost from first shop to $i_{th}$ shop is to pick up a canoe at the first rental shop and directly travel to last shop without dropping.
+  \item	Using a nested loop to find the cheapest way for each rental shop :
+	\begin{itemize}
+	  \item For the outer loop, each C[i] represents the cheapest recorded way to get to rental shop $i$.
+	  \item Since we have already the cheapest way from first shop to the $i_{th}$ shop, 
+		then we use a nested loop to check whether current $C[i] + c_{ij}$ is cheaper than recorded cost to get to rental shop $j$. 
+	  \item If current $C[i] + c_{ij}$ is cheaper, update to current cost. Otherwise keep the previous record. 
+	\end{itemize}
+  \item After iteration, the C[n] records the cheapest cost from first rental shop to last rentail shop. 
+\end{itemize}
 
-1. In this graph, we begin at $C_0$. The shortest distance is $C_0 \rightarrow C_1$. Move to $C_1$ and mark $C_0$ as visited. \\
-2. Then at $C_1$, the shortest distacne is $C_1 \rightarrow C_2$ without visited cities. Move to $C_2$ and mark $C_1$ as visited. \\
-3. Then at $C_2$, the shortest distacne is $C_2 \rightarrow C_3$ without visited cities. Move to $C_3$ and mark $C_2$ as visited. \\
-4. Then at $C_3$, the shortest distacne is $C_3 \rightarrow C_4$ without visited cities. Move to $C_4$ and mark $C_3$ as visited. \\
-5. All cites visited and back to $C_0$. \par
-The total distacne is $2+2+11+5 = 20$.
-However, if we follow the path $C_0 \rightarrow C_2 \rightarrow C_1 \rightarrow C_3 \rightarrow C_0$, the total distance will be $3+2+3+5=13$.
-Thus, my algorithm does works but does not find the correct answer. \\
+\begin{algorithm}
+\begin{algorithmic}
+\State C[n] \textbf{ //} n-size array
+\State C[1] $\leftarrow$ $0$
+\State \textbf{For} i = 2 to n :
+\State \hspace{0.4cm} C[i] $\leftarrow c_{1 i}$ \\
+
+\State \textbf{For} i = 2 to n :
+\State \hspace{0.4cm} \textbf{For} j = i + 1 to n :
+\State \hspace{0.8cm} \textbf{If} C[j] $>$ C[i] + $c_{ij}$
+\State \hspace{1.2cm} C[j] = C[i] + $c_{ij}$ \\
+\State \textbf{Return} C[n]
+\end{algorithmic}
+\end{algorithm}
 \noindent \\
 \textbf{running time:} \par
-My algorithm visits all cities exactly once. Thus the time is $O(|V|)$, where $|V|$ means the number of all cities.
+The initialization uses $O(n)$ time. 
+The whole nested loop needs $O(n^2)$ time. \par
+The final time is $O(n) + O(n^2) = O(n^2)$
+
 
 
 \pagebreak
 \noindent
 \large Question 4: \par
 \normalsize 
-\setlength{\baselineskip}{8mm}
-Based on description of question, I think this procedure does not give me the correct shortest path from $s$ to $t$.
-For example: \\
- \par
-In this example, we parallely use Dijkstra’s algorithm for node $t$ and node $s$. 
-Since the length $l(s, A)$ is shorter than $l(s, C)$ and $l(t, B)$ is shorter than $l(t, F)$, the $dist(A)$ will be smaller than $dist(C)$ and $dist(B)$ will be smaller than $dist(B)$.
-Then there will be a overlap between node $A$ and node $B$ without finding the real shortest path. 
-Based on description, $d_1 = 5 + 11$, $d_2 = 5$, $d_1 + d_2 = 21$. This is incorrect. \par
-Thus, this algorithm does not find the correct answer. \\
+There may be many sets of coins with total value exactly equal to V, but here my goal is to find one. 
+My algorithm is:
+\begin{itemize}
+  \item	Build an array and initialize every element of this array to an empty set. 
+	Each set will records only one possible combination of coins. 
+  \item	Using a nested loop to find a possible set :
+	\begin{itemize}
+	  \item For the outer loop, at each step $i$, we only choose the coin with value $v_i$.
+	  \item In the inner loop, at each step $j$, check whether we can construct a new set by set[j - $v_i$] $\cup$ $v_i$ exactly equal to value $j$.
+	  \item If the new set equals to our expected value $V$, just return it and end loop. 
+	\end{itemize}
+\end{itemize}
 
+\begin{algorithm}
+\begin{algorithmic}
+\State n = numbers of coins
+\State set[V+1]
+\State \textbf{For} i = 0 to V :
+\State \hspace{0.4cm} set[i] $\leftarrow$ $\emptyset$ \textbf{ //} every element of this array is an empty set.  \\
 
-\pagebreak
-\noindent
-\large Question 5: \\
-\normalsize 
-\setlength{\baselineskip}{8mm}
-\noindent
-\textbf{(1):} \par
-Based on description of question, I think the directed graph G seems as below. \\
- \par
-The infinite path $p$ is infinite sequence $s, a, b, c, d, b, c ,d, b, c, ..., b, c, d, e, f$, where "..." is infinite loop. 
-The $Inf(p)$ will be a set $\{b, c, d\}$. \\
-\\
-\textbf{Claim: } If $p$ is an infinite path of $G$, then the $Inf(p)$ is a subset of a single strongly connected component of $G$. \\
-\textbf{Proof: } By contradiction. Suppose $p$ is an infinite path of $G$, and the $Inf(p)$ is not a subset of a single strongly connected component of $G$. 
-Based on description and my example, the vertices in an infinite path $p$ are visited infinitely often because there is a cycle. 
-The $Inf(p)$ is the set of vertices that occur infinitely many times in p. Therefore, the vertices in this set are connected by some directed path. \par
-The defination of SCC is: in a directed graph, SCC is a set of nodes such that there is a (directed) path between every pair in both directions.
-Based on defination of SCC, for each set of a single strongly connected component of $G$, their nodes are connected by a path. 
-Since the vertices in $Inf(p)$ are all connected, the $Inf(p)$ must be a subset of a single strongly connected component of G. 
-There is a contradiction and my suppose is incorrect. The claim holds.
-
-
-
-\pagebreak
-\noindent
-\large Question 5: \\
-\normalsize 
-\setlength{\baselineskip}{8mm}
-\noindent
-\textbf{(2):} \par
-If graph $G$ has an infinite path, then there will be a cycle in $G$.
-Since $G$ has a finite number of vertices, only in a cycle, some vertices of $G$ are able to be visited infinitely often. \par
-Thus, my algorithm is to determine if $G$ has a cycle.
-I use DFS on $G$. If depth-first search reveals a back edge of a directed graph $G$, $G$ has a cycle and there is a infinite path. 
-If we explore all nodes and there does not exist a back edge, then $G$ does not has an infinite path.   \\
-\\
-\textbf{Claim: } If the DFS reveals a back edge, the graph has a cycle.\\
-\textbf{Proof: } let $(c, s)$ be a back edge from node $c$ to node $s$. By definition of back edge, $s$ is an ancestor of $c$.
-In the DFS tree, there is a path from $s$ to $c$. The path $s \rightarrow c$ and back edge $(c, s)$ form a cycle. The claim holds. \\
-\\
+\State \textbf{For} i = 0 to n :
+\State \hspace{0.4cm} \textbf{For} j = $v_i$ to V :
+\State \hspace{0.8cm} \textbf{if} set[j] is $\emptyset$
+\State \hspace{1.2cm} set[j] = set[j - $v_i$] $\cup$ $v_i$
+\State \hspace{0.8cm} \textbf{if} set[V] is \textbf{not} $\emptyset$
+\State \hspace{1.2cm} \textbf{Return} set[V]
+\end{algorithmic}
+\end{algorithm}
+\noindent \\
 \textbf{running time:} \par
-My algorithm is the same as basic DFS. Thus my running time is $O(|V| + |E|)$.
+The initialization uses $O(n)$ time. 
+The whole nested loop needs $O(n^2)$ time. \par
+The final time is $O(n) + O(n^2) = O(n^2)$
+
+
+
+
+\pagebreak
+\noindent
+\large Question 5: \par
+\large (a): \par
+\normalsize 
+By hint, sort given boxes by their base area, $W$ $\times$ $L$, in decreasing order. \par
+After sorting, we can draw a DAG: 
+Establish a nodes i for each box $box_i$, and add direct edge $(i, j)$ whenever it is possible for $box_i$ and $box_j$ whose area is in an decreasing order, 
+that is, whenever $i < j$ and $W_i$ $\times$ $L_i$ $>$ $W_j$ $\times$ $L_j$. \par
+For example, given 5 boxes :
+
+	\begin{table}[h!]
+	  \begin{center}
+	    \label{tab:table1}
+	    \begin{tabular}{l|c|c|r}
+	      \textbf{Box} & \textbf{Width} & \textbf{Length} & \textbf{Height}\\
+	      \hline
+	      A & 9 & 9 & 1\\
+	      B & 7 & 5 & 2\\
+	      C & 1 & 2 & 4\\
+	      D & 10 & 8 & 2\\
+	      E & 2 & 3 & 2\\
+	    \end{tabular}
+	  \end{center}
+	\end{table} \par
+The DAG is: \par
+\includegraphics[width=10cm, height=4cm]{question5a} 
+\\
+\par
+Since the constraints, after sorting boxes, every two adjacent boxes can be either stacking or not. And for all $i < j$, $box_j$ can not be on top of $box_i$.
+Thus, when we draw a grap, there must be no cycle, which means the graph is DAG.
+
+
+
+\pagebreak
+\noindent
+\large Question 5: \par
+\large (b): \par
+\normalsize 
+My algorithm is:
+\begin{itemize}
+  \item	sort given boxes by their base area, $W$ $\times$ $L$, in decreasing order.
+  \item Create an array $S$ with size of the number of boxes to record the heights of the tallest possible stack for each box.
+  \item	Using a nested loop:
+	\begin{itemize}
+	  \item In the inner loop, since array $S$ records heights of the tallest possible stack of larger boxes, so we traverse $S$ forward to find the maximun S[j] + $H_i$(height of current box). 
+	  \item After ending inner loop, we check whether there is a stack is taller than current box. If yes, record height of stack. Otherwise, only record the height of current box. 
+	\end{itemize}
+  \item Since, there may not be only one smallest box. Thus, at last we iterate through array $S$ and find the maximum one to return.
+\end{itemize}
+
+\begin{algorithm}
+\begin{algorithmic}
+\State Sort given boxes by their base area, $W$ $\times$ $L$, in decreasing order.
+\State n = numbers of boxes
+\State S[n] \textbf{ //} n-size array
+\State \textbf{For} i = 1 to n :
+\State \hspace{0.4cm} S[i] $\leftarrow$ 0  \\
+
+\State \textbf{For} i = 1 to n :
+\State \hspace{0.4cm} \textbf{}next = 0
+\State \hspace{0.4cm} \textbf{For} j = i - 1 to 1 :
+\State \hspace{0.8cm} \textbf{if} $W_j$ $\geq$ $W_i$ \textbf{and} $L_j \geq L_i$ \textbf{and} $(H_i+S[j]) > next$ \textbf{:}   
+\State \hspace{1.2cm} next = $H_i+S[j]$
+\State \hspace{0.4cm} S[i] = max( $H_i$, next)
+\\
+\State result = S[1]
+\State \textbf{For} i = 2 to n :
+\State \hspace{0.4cm} \textbf{if} S[i] $>$ result
+\State \hspace{0.8cm} \textbf{} result = S[i]
+\State result result
+\end{algorithmic}
+\end{algorithm}
+\noindent \\
+\textbf{running time:} \par
+Sorting need $O(nlog_{}{n})$ time.
+The initialization uses $O(n)$ time. 
+Therefore, whole iteration need $O(n^2)$ time. \par
+The final time is $O(nlog_{}{n}) + O(n) + O(n^2) = O(n^2)$
 
 
 
@@ -244,20 +329,44 @@ My algorithm is the same as basic DFS. Thus my running time is $O(|V| + |E|)$.
 \large \textbf{Extra}:\\ \vspace{5mm}\par
 \normalsize 
 \setlength{\baselineskip}{8mm}
-For each binary tree, the number of its edges $|E|$ equals to the number of its nodes minus one, $|E| = |V| - 1$. 
-If the a binary tree has a perfect matching, the $|V|$ must be even. 
-Since there is only one root node at the first level.
-Thus, for a binary tree $T$, we need to check every node:
+
+This question is similar as maximum contiguous subsequence. 
+Based on description, there are two subseqences which I need to consider:
 \begin{itemize}
-\item For current node, if the number of all descendants in left is odd and the number of all descendants in right is even or zero, this partition has a perfect matching. 
-\item For current node, if the number of all descendants in right is odd and the number of all descendants in left is even or zero, this partition has a perfect matching. 
-\item If current node is a leaf, ignore it and return back to check its parent.
-\item For current node, if the number of all descendants in right is and the number of all descendants in left are both even or odd, this whole tree does not have a perfect matching. 
+  \item $x_1 - x_2 + x_3 - x_4 + ... \pm x_n$
+  \item $x_2 - x_3 + x_4 - x_5 + ... \pm x_n$
 \end{itemize}
-I recursively go to deepest level and recusively back with check each node.
+Find both sums of maximum contiguous subsequence of above subsequences respectively. The greater one is result.
+
+
+\begin{algorithm}
+\begin{algorithmic}
+\State sum1[n]
+\State sum1[1] $\leftarrow$ $x_1$
+\State \textbf{For} i = 2 to n :
+\State \hspace{0.4cm} \textbf{If} i \textbf{mod} 2 == 0 \textbf{:}
+\State \hspace{0.8cm} sum1[i] $\leftarrow$ max($x_i$, sum1[$x_{i-1}$] - $x_i$) 
+\State \hspace{0.4cm} \textbf{Else}
+\State \hspace{0.8cm} sum1[i] $\leftarrow$ max($x_i$, sum1[$x_{i-1}$] + $x_i$)
+\\
+\State sum2[n-1]
+\State sum2[1] $\leftarrow$ $x_2$
+\State \textbf{For} i = 3 to n:
+\State \hspace{0.4cm} \textbf{If} i \textbf{mod} 2 == 0 \textbf{:}
+\State \hspace{0.8cm} sum2[i] $\leftarrow$ max($x_i$, sum2[$x_{i-1}$] + $x_i$) 
+\State \hspace{0.4cm} \textbf{Else}
+\State \hspace{0.8cm} sum2[i] $\leftarrow$ max($x_i$, sum2[$x_{i-1}$] - $x_i$)
+\\
+\State firstMax $\leftarrow$ maximum value in sum1
+\State secondMax $\leftarrow$ maximum value in sum2
+\State \textbf{return} max(firstMax, secondMax)
+\end{algorithmic}
+\end{algorithm}
+
 
 \textbf{running time:} \par
-My algorithm is check all nodes one time. Thus my running time is $O(|V|)$.
+Traversing through two subsequences uses $O(n)$ time respectively. Find maximum value in two arrays uses $O(n)$ time respectively. 
+Thus my running time is $O(n) + O(n) + O(n) + O(n)$ = $O(n)$.
 
 
 \end{document} 
