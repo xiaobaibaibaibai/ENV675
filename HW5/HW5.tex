@@ -57,7 +57,7 @@
 \vspace*{1ex}
 
 \begin{minipage}[t]{.8in}
-  \textbf{\circled{Yes} \quad No}
+  \textbf{Yes \quad \circled{No}}
 \end{minipage}
 \qquad 
 \begin{minipage}[t]{5.5in}
@@ -97,7 +97,7 @@ Suppose the given grid has $n$ numbers of rows and $m$ numbers of columns.
 	since we can only go straight north to the current position at the previous intersection.
   \item	On the Southernmost road, all T[n][j] = T[n][j-1] + $d_{n,j}$,
 	since we can only go straight east to the current position at the previous intersection.
-  \item Then for remaining intersections, we can go straight east or straigth north to the current position at the previous intersection.
+  \item Then for remaining intersections, we can go straight east or straigth north to the current position at the previous intersections.
 	Therefore, we choose the shorter one, T[i][j] = $d_{i,j}$ + \textbf{min}(T[i+1][j], T[i][j-1])
 \end{itemize}
 
@@ -161,7 +161,7 @@ Following is helper function:
 \State \hspace{0.8cm} \textbf{if} Seq[i] $\not=$ Seq[j] \textbf{:}
 \State \hspace{1.2cm} \textbf{Return} False
 \State \hspace{0.8cm} i++, j- -
-\State \textbf{Return} True
+\State \hspace{0.4cm} \textbf{Return} True
 \end{algorithmic}
 \end{algorithm}
 \noindent \\
@@ -178,9 +178,9 @@ By hint, I modify the graph.
 In original graph, there are not capacities on the edges, so I will add capacities for each edges.
 
 \begin{itemize}
-  \item Assign $\infty$ or the sum of capacities of all nodes to the capacities of all edges from source node. 
-  \item If the current node only points to one node and is only pointed by one node.
-	then assign the same size of capacity on current node to the edge from current node. 
+  \item Assign $\infty$ or the sum of capacities of all nodes to the capacities of all edges leaving from source node. 
+  \item If the current node is only pointed by one node and only one edge leaves from this node.
+	Then assign the same size of capacity on current node to the edge leaving from current node. 
   \item If the current node $u$ points to multiple nodes or is pointed by multiple nodes, 
 	then make node $u$ only connect with a new node $v$ which has the same capacity.
 	Then assign the same size of capacity on node $u$ to the $Edge(u, v)$ 
@@ -194,11 +194,11 @@ Following is an example. The first one is original graph and the second is modif
 \includegraphics[width=15cm, height=4cm]{question3R} 
 
 \par
-We can find a max flow using original Ford-Fulkerson algorithm on the modified graph.
+We can find a max flow using original maximum flow algorithm on the modified graph.
 \\
 
 \textbf{running time:} \par
-The time is the same as the time of original Ford-Fulkerson algorithm, $O(|V|\cdot|E|^2)$.
+The time is the same as the time of original maximum flow algorithm, $O(|V|\cdot|E|^2)$.
 
 
 
@@ -209,23 +209,24 @@ The time is the same as the time of original Ford-Fulkerson algorithm, $O(|V|\cd
 My algorithm is: 
 
 \begin{itemize}
-  \item Let each animal be a node $a_i$. Then let each doctor be a node $D_j$. Create a source node $s$ and a sink node $t$. 
-  \item Connet source node with every node $a_i$, and each $Edge(s, a_i)$ has a capacity $h_i$.
-	Input flow is the time of the animals to be treated 
-  \item If animal $a_i$ can be treated by doctor $D_j$, connect $a_i$ with $D_j$, and each $Edge(a_i, D_j)$ has a capacity $C_j$.
-  \item Connect every doctor $D_j$ to sink node $t$, and each $Edge(D_j, t)$ has a capacity $C_j$. 
+  \item Create a node for each animal denoted as $a_i$. Then create a node for each doctor denoted as $D_j$. Create a source node $s$ and a sink node $t$. 
+  \item Draw edges from source node to every node $a_i$, and each $Edge(s, a_i)$ has a capacity $h_i$.
+	Input flow is the time of the animals to be treated.
+  \item If animal $a_i$ can be treated by doctor $D_j$, draw a edge from $a_i$ to $D_j$, and each $Edge(a_i, D_j)$ has a capacity $C_j$.
+  \item Draw edges from every doctor $D_j$ to sink node $t$, and each $Edge(D_j, t)$ has a capacity $C_j$. 
 	This setp ensures each doctor $j$ works at most $C_j$ time. 
+  \item Run maximum flow algorithm on this graph. 
 
 \end{itemize}
 
-Following is an example.
+Following is an example. \\
 \includegraphics[width=6cm, height=10cm, angle=90,origin=c]{question4}
 \par
-We can get the answer by using original Ford-Fulkerson algorithm on this graph.
+We can get the answer by using original maximum flow algorithm on this graph.
 \\
 
 \textbf{running time:} \par
-The time is the same as the time of original Ford-Fulkerson algorithm, $O(|V|\cdot|E|^2)$.
+The time is the same as the time of original maximum flow algorithm, $O(|V|\cdot|E|^2)$.
 
 
 
@@ -236,35 +237,36 @@ The time is the same as the time of original Ford-Fulkerson algorithm, $O(|V|\cd
 \normalsize 
 My algorithm is:
 \begin{itemize}
-  \item	Let each paper be a node $p_j$ and each reviewer be a node $R_i$. Create a source node $s$ and a sink node $t$.
-  \item Connet source node with every node $p_j$, and each $Edge(s, p_j)$ has a capacity $3$. 
-  \item Connect each node $p_j$ with every node $R_i$ if paper $p_j$ is not submitted by reviewer $R_i$.  
+  \item	Create a node for each paper denoted as $p_j$, and create a node for each reviewer denoted as $R_i$. Create a source node $s$ and a sink node $t$.
+  \item Draw edges from source node to every node $p_j$, and each $Edge(s, p_j)$ has a capacity $3$. 
+  \item Draw a edge from each node $p_j$ to every node $R_i$ if paper $p_j$ is not submitted by reviewer $R_i$.  
 	Each $Edge(p_j, R_i)$ has a capcity 1. 
-  \item Connect every node $R_i$ with sink node, and each $Edge(s, p_i)$ has a capacity $m_i$.
-  \item Run max flow algorithm. 
+  \item Draw edges from every node $R_i$ to sink node, and each $Edge(s, p_i)$ has a capacity $m_i$.
+  \item Run maximum flow algorithm. 
 	However, in this algorithm, we must ensure that in the final graph all flows from source node to each node $p_j$ is 3, 
-	which means that each node $p_j$ is reviewed by 3 times.
+	which means that each node $p_j$ is reviewed by 3 times. 
+	The final flow into sink node should be 3 times of numbers of papers.
 \end{itemize}
 
 \noindent \\
 \textbf{running time:} \par
-The time is the same as the time of original Ford-Fulkerson algorithm, $O(|V|\cdot|E|^2)$.
+The time is the same as the time of original maximum flow algorithm algorithm, $O(|V|\cdot|E|^2)$.
 
 
 
 \pagebreak
 \large \textbf{Extra}:\\ \vspace{5mm}\par
 \normalsize 
-
 Create an array $dp[M][N]$: $dp[i][j]$ presents we need to choose $i$ numbers of fruits from $j$ numbers of boxes. \par
 In initialization, if $m_1$ $\geq$ 1, assign $dp[1][1]$ to 1; else assign $dp[1][1]$ to 0. \par
 For all $dp[1][2]$ to $dp[1][N]$, in each step $j$, if $m_j$ $\geq$ 1, then assign $dp[1][j]$ = $dp[1][j - 1] + 1$; else assign $dp[1][j] = dp[1][j - 1]$. 
 In each step $j$, we need to choose one fruit from $j$ numbers of boxes. 
-If $B_j$ is not empty, then there will be one more ways to choose.
+If $B_j$ is not empty, then there will be $dp[1][j - 1] + 1$ ways to choose.
 Otherwise, there are still the $dp[1][j - 1]$ numbers of ways. \par
 For all $dp[2][1]$ to $dp[M][1]$, in each step $i$, if $m_1$ $\geq$ $i$, then assign $dp[i][1] = 1$; else assign $dp[i][1] = 0$. 
 In each step $i$, we need to choose $i$ numbers of fuits from $B_1$.
-If $m_1$ is larger than required numbers of fruits $i$, then there is one type to choose; Otherwise, there is no fruit to choose. \par
+If $m_1$ is larger than required numbers of fruits $i$, then there is one type to choose; 
+Otherwise, there is not enough numbers of fruits to choose. \par
 Iterate from $i = 2$ to $M$, and for each i, iterate from $j = 2$ to $N$, 
 and in each step $i$ $j$, assign $dp[i][j] = dp[i - 1][j] + dp[i][j - 1]$. \par
 The final result is in $dp[M][N]$.
@@ -279,7 +281,7 @@ The final result is in $dp[M][N]$.
 \State \hspace{0.4cm} \textbf{If} $m_j$ $\geq$ 1 \textbf{:}
 \State \hspace{0.8cm} $dp[1][j]$ $\leftarrow$ $dp[1][j - 1] + 1$
 \State \hspace{0.4cm} \textbf{Else :}
-\State \hspace{0.8cm} sum1[i] $dp[1][j]$ $\leftarrow$ $dp[1][j - 1]$
+\State \hspace{0.8cm} $dp[1][j]$ $\leftarrow$ $dp[1][j - 1]$
 \\
 \State \textbf{For} i = 2 to M :
 \State \hspace{0.4cm} \textbf{If} $m_1$ $\geq$ $i$ \textbf{:}
