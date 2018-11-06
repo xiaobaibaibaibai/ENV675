@@ -243,14 +243,13 @@ My algorithm is:
 	Each $Edge(p_j, R_i)$ has a capcity 1. 
   \item Draw edges from every node $R_i$ to sink node, and each $Edge(s, p_i)$ has a capacity $m_i$.
   \item Run maximum flow algorithm. 
-	However, in this algorithm, we must ensure that in the final graph all flows from source node to each node $p_j$ is 3, 
-	which means that each node $p_j$ is reviewed by 3 times. 
-	The final flow into sink node should be 3 times of numbers of papers.
+	However, in this algorithm, we must ensure that each node $p_j$ is reviewed by 3 times. 
+	So the final flow into sink node should be 3 times of numbers of papers.
 \end{itemize}
 
 \noindent \\
 \textbf{running time:} \par
-The time is the same as the time of original maximum flow algorithm algorithm, $O(|V|\cdot|E|^2)$.
+The time is the same as the time of original maximum flow algorithm algorithm, $O(|N + M|\cdot|N + M|^2) = O(|N + M|^3)$.
 
 
 
