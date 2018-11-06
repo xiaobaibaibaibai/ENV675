@@ -216,6 +216,8 @@ My algorithm is:
   \item Draw edges from every doctor $D_j$ to sink node $t$, and each $Edge(D_j, t)$ has a capacity $C_j$. 
 	This setp ensures each doctor $j$ works at most $C_j$ time. 
   \item Run maximum flow algorithm on this graph. 
+	Look at which edges between aminal nodes and doctor nodes has flow along with them; 
+	these edges correspond to the assignment animals to dockers.
 
 \end{itemize}
 
@@ -243,7 +245,9 @@ My algorithm is:
 	Each $Edge(p_j, R_i)$ has a capcity 1. 
   \item Draw edges from every node $R_i$ to sink node, and each $Edge(s, p_i)$ has a capacity $m_i$.
   \item Run maximum flow algorithm. 
-	However, in this algorithm, we must ensure that each node $p_j$ is reviewed by 3 times. 
+	Look at which edges between paper nodes and reviewer nodes has unit 1 of flow along with them; 
+	these edges correspond to the assignment papers to reviewers.
+	In this algorithm, we must ensure that each node $p_j$ is reviewed by 3 times. 
 	So the final flow into sink node should be 3 times of numbers of papers.
 \end{itemize}
 
