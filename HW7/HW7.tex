@@ -1,0 +1,297 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage[body={7in,9.5in},centering]{geometry}
+\usepackage{fancyhdr}
+\usepackage{times}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\lhead{}
+\rhead{}
+\renewcommand{\headrulewidth}{3pt}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\pagestyle{empty}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+
+\begin{document}
+\begin{center}
+  \Large
+  CIS 675 (Fall 2018) Disclosure Sheet 
+\end{center} 
+\vspace*{2em}
+
+\noindent
+\textbf{\Large Name: \underline{ Wentan Bai }} 
+
+
+\noindent 
+\begin{minipage}[t]{1.0\linewidth}
+
+\begin{minipage}[t]{0.25\linewidth}
+\textbf{\Large
+  HW \# \underline{ 7 }
+} 
+
+\end{minipage} \vspace*{3ex}
+
+
+
+
+\begin{minipage}[t]{.8in}
+  \textbf{\circled{Yes} \quad No}
+\end{minipage}
+\qquad 
+\begin{minipage}[t]{5.5in}
+  Did you consult with anyone on parts of this assignment, including other students, TAs, or the instructor? 
+\end{minipage}
+\vspace*{1ex}
+
+\begin{minipage}[t]{.8in}
+  \textbf{Yes \quad \circled{No}}
+\end{minipage}
+\qquad 
+\begin{minipage}[t]{5.5in}
+  Did you consult an outside source (such as an Internet forum or a
+  book other than the course textbook) on parts of this assignment? 
+\end{minipage}
+\vspace*{1ex}
+
+\noindent
+  If you answered \textbf{Yes} to one or more questions, please give the details here: \vspace*{5ex} \par
+  I also consult all questions and extra question with another student, Wentian Bai. For all questions, we discussed our ideas and I finish my algorithms independently. 
+
+
+\vfill
+\end{minipage}
+
+
+
+\vspace*{40ex}
+
+By submitting this sheet through my Blackboard account, I assert that the information on this sheet is true.
+
+%\vfill
+
+\hfill {\tiny This disclosure sheet was based on one originally designed
+  by
+  Profs. Royer and Older.}
+
+
+\pagebreak
+\noindent
+\large Question 1: \vspace{5mm} \\
+\normalsize
+Let the algorithm that solves Hitting Set problem be called hitting set algorithm.
+\\
+\\
+\noindent
+Reducing the Vertex Cover problem to Hitting Set problem
+\begin{itemize}
+  \item \textbf{$f$ :}  For each $edge(u, v)$ in the graph of Vertex Cover problem, create a set which only has two elements $\{u, v\}$. 
+		     Let the value $b$ equal to given value $c$. 
+  \item	\textbf{$h$ :} Return the set that is given by hitting set algorithm.
+\end{itemize}
+
+\noindent
+4 Questions :
+\begin{enumerate}
+  \item Is \textbf{$f$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, all we doing is creating a set for each edge, whose time is $O(|E|)$. 
+	\end{itemize}
+  \item	Is \textbf{$h$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, $h$ only returns a set.  
+	\end{itemize}
+  \item If hitting set algorithm finds a set, does this set satisfy the requirements of Vertex Cover problem? 
+	\begin{itemize}
+	  \item Yes. First hitting set algorithm will give a set with size at most $c$. 
+		Second, the hitting set contains at least one element from every set $S_i$ which represents the two endpoints of every edges. 
+		So, if there exists a hitting set, 
+		the elements in hitting set must connects with all edges and every edge must have at least one of its two endpoints included in the set of $c$ nodes.
+	\end{itemize}
+  \item If hitting set algorithm cannot give a solution, does it mean there is actually no solution for Vertex Cover problem? 
+	\begin{itemize}
+	  \item Yes. 
+		Since hitting set algorithm constrains the size of hitting set at most $c$ and checks every edge of graph,
+		there is no solution if hitting set algorithm cannot find one.
+	\end{itemize}
+\end{enumerate}
+
+\noindent
+Show that Hitting Set is NP-Complete
+\begin{itemize}
+  \item Vertex Cover is known to be NP-Complete.
+  \item	Vertex Cover problem is able to reduce to Hitting Set problem.
+  \item The solution given by hitting set algorithm can be verified in polynomial time. 
+	If we get a hitting set, then we can iterate over all sets and check whether for each set there is at least one element in hitting set. 
+	This process is in polynomial time.  
+\end{itemize}
+\noindent
+Therefore, Hitting Set is NP-Complete.
+
+
+\pagebreak
+\noindent
+\large Question 2: \vspace{5mm} \\
+\normalsize
+Let the algorithm that solves g-Clause SAT problem be called g-Clause SAT algorithm.
+\\
+\\
+\noindent
+Reducing SAT problem to g-Clause SAT problem
+\begin{itemize}
+  \item \textbf{$f$ :} Set integer $g$ to be the number of clauses in Set problem.  
+  \item	\textbf{$h$ :} Return the result that is given by g-Clause SAT algorithm.
+\end{itemize}
+
+\noindent
+4 Questions :
+\begin{enumerate}
+  \item Is \textbf{$f$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, all we doing is to assign $g$ a value, whose time is $O(1)$.
+	\end{itemize}
+  \item	Is \textbf{$h$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, $h$ only returns the assignment for each literal.  
+	\end{itemize}
+  \item If g-Clause SAT algorithm finds an assignment, does this assignment satisfy the requirements of Sat problem? 
+	\begin{itemize}
+	  \item Yes. We set $g$ to be the number of clauses in SAT problem. 
+		If every clause is satisfied, then there will be $g$ numbers of satisfied clauses.
+		Then the whole Boolean formula is also satisfied so this assignment is the solution for SAT problem.
+	\end{itemize}
+  \item If g-Clause SAT algorithm cannot give a solution, does it mean there is actually no solution for SAT problem? 
+	\begin{itemize}
+	  \item Yes. Since $g$ is the number of clauses in SAT problem, 
+		if g-Clause SAT algorithm cannot give a solution, it means there is at least one clause in SAT problem that is not satisfied.
+	\end{itemize}
+\end{enumerate}
+
+\noindent
+Show that g-Clause SAT is NP-Complete
+\begin{itemize}
+  \item SAT problem is known to be NP-Complete.
+  \item	SAT problem is able to reduce to g-Clause SAT problem.
+  \item The solution given by g-Clause SAT algorithm can be verified in polynomial time. 
+	If we get a truth assignment by algorithm, then we follow the assignment to assign truth values to pairwise literals. 
+	Then we check $g$ numbers of clauses. This process is in polynomial time.
+\end{itemize}
+\noindent
+Therefore, g-Clause SAT is NP-Complete.
+
+
+\pagebreak
+\noindent
+\large Question 3: \vspace{5mm} \par
+\normalsize
+To prove HAMILTONIAN PATH is in NP-Complete, I will show HAMILTONIAN CYCLE problem is able to reduce to HAMILTONIAN PATH problem, 
+and solution of HAMILTONIAN PATH problem can be verified in polynomail time. \par
+
+Let the algorithm that solves HAMILTONIAN PATH problem be called HAMILTONIAN PATH algorithm.
+\\
+\\
+\noindent
+Reducing HAMILTONIAN CYCLE problem to HAMILTONIAN PATH problem
+\begin{itemize}
+  \item \textbf{$f$ :} For every $edge(u, v)$ in the graph of HAMILTONIAN CYCLE problem, we temporarily remove $edge(u, v)$ and set $s$ to $u$ as well as $t$ to $v$.
+		       We will run HAMILTONIAN PATH algorithm on the modified graph to try to find a path.
+		       If the HAMILTONIAN PATH algorithm does not find a suitable path, then we restore the $edge(u, v)$ and continue to check other edges. 
+  \item	\textbf{$h$ :} If HAMILTONIAN PATH algorithm find a path, then add $edge(s, t)$ to connect $s$ and $t$ and return the cycle. 
+\end{itemize}
+
+\noindent
+4 Questions :
+\begin{enumerate}
+  \item Is \textbf{$f$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, all we doing is iterating $O(|E|)$ times over every edges and run HAMILTONIAN PATH algorithm. 
+	\end{itemize}
+  \item	Is \textbf{$h$} in polynomial time? 
+	\begin{itemize}
+	  \item Yes, $h$ add an edge and returns a cycle.
+	\end{itemize}
+  \item If HAMILTONIAN PATH algorithm finds a solution, does this solution satisfy the requirements of HAMILTONIAN CYCLE problem? 
+	\begin{itemize}
+	  \item Yes. The HAMILTONIAN PATH algorithm give a path that touches every node exactly once. 
+		By add a $edge(s, t)$ to create a cycle, this cycle touches every node exactly once.
+	\end{itemize}
+  \item If HAMILTONIAN PATH algorithm cannot give a solution, does it mean there is actually no solution for HAMILTONIAN CYCLE problem? 
+	\begin{itemize}
+	  \item Yes. If there is not a path that touches every node exactly once, then it means we must touch some nodes at least twice. 
+	\end{itemize}
+\end{enumerate}
+
+\noindent
+Show that HAMILTONIAN PATH is NP-Complete
+\begin{itemize}
+  \item HAMILTONIAN CYCLE problem is known to be NP-Complete.
+  \item	HAMILTONIAN CYCLE problem is able to reduce to HAMILTONIAN PATH problem.
+  \item We can follow the given path and check whether we touch every node exactly once. This process is in polynomial time. 
+\end{itemize}
+\noindent
+Therefore, HAMILTONIAN PATH is NP-Complete.
+
+
+\pagebreak
+\noindent
+\large Question 4: \vspace{5mm} \par
+\normalsize
+\begin{enumerate}
+  \item Denoted coordinates of robot as $(x, y)$. Using DFS on robot and try to make $x$ and $y$ closer to $(0, 0)$. 
+	When $x > 0$, then choose the way that makes $x$ smaller. When $y > 0$, then choose the way that makes $y$ smaller. 
+	When $x < 0$, then choose the way that makes $x$ greater. When $y > 0$, then choose the way that makes $y$ greater. 
+  \item Each time, move PacMan to the token that is the nearest to PacMan. 
+	If there is a ghost on the nearest token or between PacMan and nearest token, then move to the second nearest token. 
+  \item First choose the most frequent literal and set it to $True$ or $False$ to make the most clauses satisfy. 
+	Then choose another literal that can make the most remaining unsatisfied clauses satisfy by set this literal to $True$ or $False$.
+	Repeat this step until no literal to choose. 
+  \item Choose a node $V_0$ with the least number of edges but this node at least has one edge. Assign this node $V_0$ a color. 
+	Then assign another color to all nodes $V_1 ... V_n$ which are connected to $V_0$. 
+	Then check all nodes $V_p .. V_q$ which are connected to $V_1 ... V_n$. 
+	For $V_p .. V_q$, if some of them can be assign a color that we previously used, assign that color to them. Otherwise, assign a new color.
+	Repeat this process until all nodes has a color.  
+\end{enumerate}
+
+
+\pagebreak
+\noindent
+\large Extra: \vspace{5mm} \par
+\normalsize 
+\textbf{Part A} \par
+To prove that CLIQUE-3 is NP-Complete, we need to show CLIQUE is able to reduce to CLIQUE-3. 
+Only if CLIQUE is able to reduce  to CLIQUE-3, we can prove CLIQUE-3 is as hard as CLIQUE. 
+\\
+\\
+\\
+\\
+\noindent
+\textbf{Part B} \par
+CLIQUE is NP-Complete and CLIQUE is not able to reduce to CLIQUE-3. 
+In CLIQUE problem, we do not know how many degree each node has. 
+If there are some 4-vertex cliques in graph, it is not able to reduce to CLIQUE-3 problem.
+It means CLIQUE-3 problem is easier than CLIQUE problem. 
+Therefore CLIQUE-3 problem is not in NP-Complete.
+
+
+
+
+\end{document} 
+
+
+
+
+
+
+

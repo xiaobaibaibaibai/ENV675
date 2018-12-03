@@ -1,0 +1,176 @@
+
+\documentclass[12pt]{article}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{enumitem}
+\usepackage[body={7in,9.5in},centering]{geometry}
+\usepackage{fancyhdr}
+\usepackage{times}
+\usepackage{tikz}
+\usepackage{hyperref}
+\usepackage{graphicx}
+
+\lhead{}
+\rhead{}
+\renewcommand{\headrulewidth}{3pt}
+\lfoot{}
+\cfoot{}
+\rfoot{}
+\pagestyle{empty}
+
+\newcommand*\circled[1]{\tikz[baseline=(char.base)]{
+            \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
+
+
+\begin{document}
+\begin{center}
+  \Large
+  CIS 675 (Fall 2018) Disclosure Sheet 
+\end{center} 
+\vspace*{2em}
+
+\noindent
+\textbf{\Large Name: \underline{ Wentan Bai }} 
+
+
+\noindent 
+\begin{minipage}[t]{1.0\linewidth}
+
+\begin{minipage}[t]{0.25\linewidth}
+\textbf{\Large
+  HW \# \underline{ 6 }
+} 
+
+\end{minipage} \vspace*{3ex}
+
+
+
+
+\begin{minipage}[t]{.8in}
+  \textbf{\circled{Yes} \quad No}
+\end{minipage}
+\qquad 
+\begin{minipage}[t]{5.5in}
+  Did you consult with anyone on parts of this assignment, including other students, TAs, or the instructor? 
+\end{minipage}
+\vspace*{1ex}
+
+\begin{minipage}[t]{.8in}
+  \textbf{Yes \quad \circled{No}}
+\end{minipage}
+\qquad 
+\begin{minipage}[t]{5.5in}
+  Did you consult an outside source (such as an Internet forum or a
+  book other than the course textbook) on parts of this assignment? 
+\end{minipage}
+\vspace*{1ex}
+
+\noindent
+  If you answered \textbf{Yes} to one or more questions, please give the details here: \vspace*{5ex} \par
+  I also consult all questions and extra question with another student, Wentian Bai. For all questions, we discussed our ideas and I finish my algorithms independently. 
+
+
+\vfill
+\end{minipage}
+
+
+
+\vspace*{40ex}
+
+By submitting this sheet through my Blackboard account, I assert that the information on this sheet is true.
+
+%\vfill
+
+\hfill {\tiny This disclosure sheet was based on one originally designed
+  by
+  Profs. Royer and Older.}
+
+
+\pagebreak
+\noindent
+\large Question 1: \vspace{5mm} \par
+\normalsize 
+If we ignore the new costs, the average cost per increment is $\$2 $ per opration, as the same as the original in-class problem. \par
+The cost of initialization is $\$2^i$ to initialize a bit at the $i_{th}$ position. 
+For $n$ operations, the total running time is $2^0 + 2^1 + 2^2 + ... + 2^{\log_{2}{n}}$ = $2^{\log_{2}{n}+1} - 1 \approx 2 \cdot 2^{\log_{2}{n}} = 2n$ \par
+Thus the final total running time is $2n + 2n = 4n$, and pre increments costs $\frac{4n}{n} = \$4/operation$ 
+
+
+
+\pagebreak
+\noindent
+\large Question 2: \vspace{5mm} \par
+\normalsize 
+Each Push operation pays $\$2$, where $\$1$ for push operation itself and $\$1$ for bank. \par
+Each pop operations also pays $\$2$, where $\$1$ for pop operation itself and $\$1$ for bank. \par
+Then at every K operations, we use dollar in bank to pay for copy. \par
+Thus, the average cost per operation is $\$2$ 
+
+
+
+
+\pagebreak
+\noindent
+\large Question 3: \vspace{5mm} \par
+\normalsize 
+Each Push operation pays $\$3$, where $\$1$ for push operation itself and $\$2$ for bank. \par
+Each pop operation costs $\$1$ from bank. \par
+When stack reaches $k$ elements, there is at least $\$2k$ in bank, so we use dollars in bank to pay for copy and delete all elements from the stack. \par
+Thus, the upper bound on the average cost per operation is $\$3$. 
+
+
+\pagebreak
+\noindent
+\large Question 4 a: \vspace{5mm} \par
+\normalsize 
+No. If there are n elements and the array is full, we add one element and then remove last one, then add one element and then remove last one, and keep repeating this step. 
+It means that we will need to expand array, shrink array, expand array, shrink array, and repeat this two steps.
+In this sequence, there are not cheap operations, so the amortized analysis does not make sense here. 
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\\
+\noindent
+\large Question 4 b: \vspace{5mm} \par
+\normalsize 
+The insertion operation still needs $\$3$, $\$1$ for insertion operation itself and $\$2$ for bank. \par
+The remove operation needs $\$2$, $\$1$ for remove operation itself and $\$1$ for bank. \par
+When we expand or shrink array, we use dollars in bank to copy elements. \par
+Thus, the average cost per operation is larger than $\$2$ and less than or equal to $\$3$. The upper bound on the average cost per operation is $\$3$. 
+
+
+
+
+
+\pagebreak
+\noindent
+\large Extra: \vspace{5mm} \par
+\normalsize 
+If k is a power of 2, we pay $\$2$. Otherwise, we pay $\$3$. \par
+To using the banking method, we need to ensure the bank will neven go bankrupt. 
+When k is not a power of 2, payment is enough to cover the cost of operation.
+When k equals to 1 or 2, the payment is also enough to cover the cost of operation. \par
+Assume k is a power of 2, denoted as $2^i$. The numbers between $2^i$ and $2^{i-1}$ is $2^{i} - 2^{i-1} = 2^{i-1}$.
+We need to use $2^{i-1}$ times to accumulate enough money to pay $\$2^i$. 
+Thus, if k is not a power of 2, we need to pay $\$2$ for bank and the $\$1$ for cover the cost of operation. \par
+Therefore, the upper bound on the average cost per operation is $\$3$. 
+
+
+
+
+
+
+\end{document} 
+
+
+
+
+
+
+
