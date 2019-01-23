@@ -1,2 +1,2 @@
 # ENV675
-useing algorithm for environmental protection
+using algorithm for environmental protection
